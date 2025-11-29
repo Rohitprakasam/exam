@@ -1,0 +1,9 @@
+public class SimpleDES { 
+public static int xor(int a, int b) { return a ^ b; } 
+public static void main(String[] args) { 
+int plaintext = 12; 
+int key = 5; 
+int step1 = xor(plaintext, key); 
+System.out.println("DES-like XOR Output: " + step1); 
+} 
+}
