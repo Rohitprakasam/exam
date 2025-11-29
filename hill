@@ -1,0 +1,19 @@
+public class HillCipher { 
+static int[][] key = { {3, 3}, {2, 5} }; 
+public static String encrypt(String msg) { 
+msg = msg.toUpperCase().replaceAll(" ", ""); 
+if (msg.length() % 2 != 0) msg += "X"; 
+String res = ""; 
+for (int i = 0; i < msg.length(); i += 2) { 
+int p1 = msg.charAt(i) - 'A'; 
+int p2 = msg.charAt(i + 1) - 'A'; 
+int c1 = (key[0][0] * p1 + key[0][1] * p2) % 26; 
+int c2 = (key[1][0] * p1 + key[1][1] * p2) % 26; 
+res += "" + (char)(c1 + 'A') + (char)(c2 + 'A'); 
+} 
+return res; 
+} 
+public static void main(String[] args) { 
+System.out.println("Encrypted: " + encrypt("HELP")); 
+} 
+}
