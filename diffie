@@ -1,0 +1,22 @@
+<!DOCTYPE html> 
+<html> 
+<body> 
+<h2>Diffie-Hellman Key Exchange</h2> 
+<script> 
+let p = 23; 
+let g = 5; 
+// Alice 
+let a = 6; 
+let A = Math.pow(g, a) % p; 
+// Bob 
+let b = 15; 
+let B = Math.pow(g, b) % p; 
+// Shared Keys 
+let keyA = Math.pow(B, a) % p; 
+let keyB = Math.pow(A, b) % p; 
+document.write("Alice Public Key: " + A + "<br>"); 
+document.write("Bob Public Key: " + B + "<br>"); 
+document.write("Shared Key: " + keyA); 
+</script> 
+</body> 
+</html> 
