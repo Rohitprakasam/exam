@@ -1,7 +1,7 @@
 1.	Generation of elementary discrete-time sequences
-  #
+  #dts
 2.	Linear convolution of a sequence
-  #
+  #linear
 3.	Circular convolution of a sequence using FFT
   #
 4.	Circular convolution using in-built function
