@@ -1,0 +1,62 @@
+%WAVEFORM GENERATOR 
+clc 
+clear all 
+close all 
+disp('Program for Waveform generation'); 
+opt=1; 
+while(opt==1) 
+disp('Which waveform do you want to generate?'); 
+disp('1.Impulse,2.Step,3.Ramp'); 
+k=input('ENTER YOUR CHOICE:'); 
+switch k 
+%IMPULSE WAVEFORM 
+case 1 
+n = [-20:1:20]; n(1) = -20, n(2) =-19 
+for k=1:1:length(n) 
+if(n(k)==0) 
+x(k)=1; 
+else 
+x(k)=0; 
+end 
+end 
+disp(x); 
+stem(n,x); 
+xlabel('n -->'); 
+ylabel('amplitude'); 
+title('UNIT IMPULSE SIGNAL'); 
+%STEP WAVEFORM 
+case 2 
+n =[-20:1:20]; 
+for k=1:1:length(n) 
+if(n(k)>=0) 
+x(k)=1; 
+else 
+x(k)=0; 
+end 
+end 
+disp(x); 
+stem(n,x); 
+xlabel('n -->'); 
+ylabel('amplitude'); 
+title('UNIT STEP SIGNAL'); 
+%RAMP WAVEFORM 
+case 3 
+n = [-20:1:20]; 
+for k=1:1:length(n) 
+if(n(k)>=0) 
+x(k)=n(k); 
+else 
+x(k)=0; 
+end 
+end 
+disp(x); 
+stem(n,x); 
+xlabel('n -->'); 
+ylabel('amplitude'); 
+title('RAMP SIGNAL'); 
+otherwise 
+disp('INVALID CHOICE'); 
+end 
+disp('Do you want to continue?'); 
+opt=input('If YES,press 1:'); 
+end 
