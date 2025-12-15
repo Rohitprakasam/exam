@@ -1,1 +1,44 @@
-use this directory file
+1.	Generation of elementary discrete-time sequences
+  #
+2.	Linear convolution of a sequence
+  #
+3.	Circular convolution of a sequence using FFT
+  #
+4.	Circular convolution using in-built function
+  #
+5.	Auto-correlation of a sequence
+  #
+==>Frequency Analysis
+
+6.	Frequency analysis using DFT
+  #
+7.	Frequency analysis using FFT
+  #
+8.	==>Filter Design
+  #
+9.	Design of FIR filters (LPF / HPF / BPF / BSF) and demonstrate the filtering operation
+  #
+10.	Design of Butterworth IIR filters (LPF / HPF) and demonstrate the filtering operation
+  #
+11.	Design of Butterworth IIR filters (BPF / BSF) and demonstrate the filtering operation
+  #
+12.	Design of Chebyshev IIR filters (LPF / HPF) and demonstrate the filtering operations
+  #
+13.	Design of Chebyshev IIR filters (BPF / BSF) and demonstrate the filtering operations
+  #
+==>DSP Processor-Based Implementation
+
+14.	Study of architecture of digital signal processor
+  #
+15.	Perform MAC operation using various addressing modes - Study of direct addressing mode
+  #
+16.	Generation of various signals and random noise
+  #
+17.	Square waveform generation using TMS320C50 processor
+  #
+18.	Triangular waveform generation using TMS320C50 processor
+  #
+19.	Saw-tooth waveform generation using TMS320C50 processor
+  #
+20.	Circular convolution using TMS320C50 processor
+  #
