@@ -1,0 +1,32 @@
+% Program to compute IDFT of a sequence
+clc;
+clear all;
+close all;
+
+disp('This is the program to compute IDFT using formula');
+fprintf('\n');
+
+% Getting the input DFT sequence
+xdft = input('Enter the DFT sequence : ');
+N = length(xdft);
+
+% IDFT computation
+for n = 1:1:N
+    temp = 0;
+    for k = 1:1:N
+        temp = temp + xdft(k)*exp(1j*(2*pi/N)*(n-1)*(k-1));
+    end
+    x_idft(n) = temp/N;
+end
+
+% Displaying the output
+disp('The IDFT of the DFT sequence is: ');
+disp(x_idft);
+
+% Plotting the IDFT sequence
+figure(1);
+ax = 0:1:length(x_idft)-1;
+stem(ax,x_idft);
+xlabel('n ->');
+ylabel('Amplitude');
+title('IDFT - x(n)');
