@@ -1,0 +1,52 @@
+%Program for FIR bandpass filter using rectangular window 
+clc; 
+close all; 
+clear all; 
+fprintf('Program for Butterworth FIR bandpass filter\n\n'); 
+
+%Getting the order of the filter as input << here order is 15
+N=input('Enter order of the filter:'); 
+wc1 = 0.25*pi; %Given 
+wc2 = 0.75*pi; %Given 
+%phase delay = (N-1)/2 
+
+alp = (N-1)/2; 
+for n = 1:1:N 
+if n-1 == alp 
+hd(n) = (wc2-wc1)/pi; 
+else 
+hd(n) = (sin((n-1-alp)*wc2) - sin((n-1-alp)*wc1))/(pi*(n-alp-1)); 
+end 
+
+%Rectangular window function 
+rect(n) = 1; 
+end 
+
+%h(n) = hd(n) * w(n) 
+
+hw = hd.*rect; 
+[h om]=freqz(hw,1,50); 
+
+%Finding the magnitude response. Note: log10 should be used. 
+%Plotting magnitude versus omega. 
+%mag_h = 20*log10(abs(h)); 
+
+mag_h = abs(h); 
+figure(1); 
+subplot(2,1,1);  
+plot(om,mag_h); 
+xlabel('w normalised to pi -->'); 
+ylabel('Gain -->'); 
+title('Magnitude response of BPF');
+
+%Finding the phase response. 
+%Plotting phase versus omega.
+
+angle_h = angle(h); 
+subplot(2,1,2); 
+plot(om,angle_h); 
+xlabel('w normalised to pi -->'); 
+ylabel('Phase -->'); 
+title('Phase response of BPF'); 
+
+
