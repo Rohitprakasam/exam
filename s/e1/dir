@@ -22,12 +22,12 @@
   #ifft
 	==>Filter Design
   
-9.	Design of FIR filters (LPF / HPF / BPF / BSF) and demonstrate the filtering operation
-  #
-10.	Design of Butterworth IIR filters (LPF / HPF) and demonstrate the filtering operation
-  #
-11.	Design of Butterworth IIR filters (BPF / BSF) and demonstrate the filtering operation
-  #
+9.	FIR LPF using hamming window 
+  #lpf-hamming
+10.	FIR HPF using hamming window 
+  #hpf-hamming
+11.	BPF using rectangular window ( fourier series method ) 
+  #bpf-rectangular
 12.	Design of Chebyshev IIR filters (LPF / HPF) and demonstrate the filtering operations
   #
 13.	Design of Chebyshev IIR filters (BPF / BSF) and demonstrate the filtering operations
