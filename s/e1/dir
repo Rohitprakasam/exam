@@ -10,35 +10,41 @@
   #acs
 ==>Frequency Analysis
 
-6.	Frequency analysis using DFT
-  #fadtf
-7.	Frequency analysis using FFT
-  #fafft
+6.	Frequency analysis using DFT (DISCRETE FOURIER TRANSFORM )
+  #dft
+
+7.      IDFT computation
+  #idft
+8.	Frequency analysis using FFT(FAST FOURIER TRANSFORM )
+  #fft
+
+9.	IFFT
+  #ifft
 	==>Filter Design
   
 9.	Design of FIR filters (LPF / HPF / BPF / BSF) and demonstrate the filtering operation
-  #fir
+  #
 10.	Design of Butterworth IIR filters (LPF / HPF) and demonstrate the filtering operation
-  #iir1
+  #
 11.	Design of Butterworth IIR filters (BPF / BSF) and demonstrate the filtering operation
-  #iir2
+  #
 12.	Design of Chebyshev IIR filters (LPF / HPF) and demonstrate the filtering operations
-  #iir3
+  #
 13.	Design of Chebyshev IIR filters (BPF / BSF) and demonstrate the filtering operations
-  #iir4
+  #
 ==>DSP Processor-Based Implementation
 
 14.	Study of architecture of digital signal processor
-  #dsp
+  #
 15.	Perform MAC operation using various addressing modes - Study of direct addressing mode
-  #dam
+  #
 16.	Generation of various signals and random noise
-  #rn
+  #
 17.	Square waveform generation using TMS320C50 processor
-  #s-tp
+  #
 18.	Triangular waveform generation using TMS320C50 processor
-  #t-tp
+  #
 19.	Saw-tooth waveform generation using TMS320C50 processor
-  #st-tp
+  #
 20.	Circular convolution using TMS320C50 processor
-  #c-tp
+  #
