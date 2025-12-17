@@ -1,0 +1,26 @@
+% Program to compute IFFT of a sequence
+clc;
+clear all;
+close all;
+
+disp('This is the program to compute IFFT using inbuilt command');
+fprintf('\n');
+
+% Getting the input FFT sequence
+xfft = input('Enter the FFT sequence: ');
+N = length(xfft);
+
+% Computing the IFFT of the input sequence
+x_ifft = ifft(xfft,N);
+
+% Displaying the output
+disp('The IFFT of the FFT sequence is: ');
+disp(x_ifft);
+
+% Plotting the IFFT output
+figure(1);
+ax = 0:1:length(x_ifft)-1;
+stem(ax,x_ifft);
+xlabel('n ->');
+ylabel('Amplitude');
+title('IFFT - x(n)');
