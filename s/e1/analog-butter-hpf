@@ -1,25 +1,32 @@
-%Program for Butterworth IIR Lowpass analog filter 
+%Program for Butterworth IIR Highpassanalog filter 
 clc; 
 close all; 
 clear all; 
-fprintf('Program for Butterworth IIR Lowpass analog filter\n\n'); 
+fprintf('Program for Butterworth IIR Highpassanalog filter\n\n'); 
 
-%We get the passedge, stopedge and sampling frequencies in Hz << use 300 and 1000 values 
+%We get the passedge, stopedge and sampling frequencies in Hz << here use 300 and 1000
 
-fp=input('Please enter the pass edge frequency:'); 
 fs=input('Please enter the stop edge frequency:'); 
-OMEGAP = 2*pi*fp; 
+fp=input('Please enter the pass edge frequency:'); 
 OMEGAS = 2*pi*fs; 
-fprintf('\nOMEGAP is %d\n',OMEGAP); 
+OMEGAP = 2*pi*fp; 
 fprintf('OMEGAS is %d',OMEGAS); 
+fprintf('\nOMEGAP is %d\n',OMEGAP); 
 
+%We get the gain magnitudes 
+%delp will be around 0.7 to 0.9 
+%dels will be around 0.1 to 0.3 
 
-%We get the attenuation in dB.rp will be around 0 to 3 dB 
-%rs will be around 30 to 50 dB << use 3 and 40 
+delp = input('\nenter the passband magnitude:'); 
+dels = input('\nenter the stopband magnintude:');
 
+%We will convert magnitudes to attenuation in dB 
+%since the buttord command used only these attenuation values 
+%rp will be around 0 to 3 dB 
+%rs will be around 30 to 50 dB 
 
-rp = input('\nPlease enter the passband ripple in dB:'); 
-rs = input('Please enter the stopband attenuation in dB:'); 
+rp = -20*log10(delp); 
+rs = -20*log10(dels); 
 
 %Computing the order(N) and cutoff frequency(wc) using wp,ws,rp,rs using 
 %thebuttord command with 's' option for analog filter. 
@@ -27,26 +34,26 @@ rs = input('Please enter the stopband attenuation in dB:');
 %option 
 
 [N wc]=buttord(OMEGAP,OMEGAS,rp,rs,'s'); 
-[b a]=butter(N,wc,'s'); 
+[b a]=butter(N,wc,'high','s'); 
 
 %Computing the frequency response using freqs command 
 %We find h for different values of omega. 
 %and storing the corresponding the w values 
 
-omega=0:1:2*OMEGAS; 
+omega=0:1:2*OMEGAP; 
 [h omega] = freqs(b,a,omega); 
 
 %Finding the magnitude response. Note: log10 should be used. 
 %Plotting magnitude versus omega. 
-%Since the specification is in dB, we will plot in dB 
+%Since the specification is not in dB, we do not plot in dB 
 
-mag_h=20*log10(abs(h)); 
+mag_h=abs(h); 
 figure(1); 
 subplot(2,1,1); 
 plot(omega,mag_h); 
 xlabel('angular frequency i.e. omega -->'); 
-ylabel('Gain in dB-->'); 
-title('Magnitude response of LPF'); 
+ylabel('Gain -->'); 
+title('Magnitude response of HPF'); 
 
 %Finding the phase response. 
 %Plotting phase versus omega. 
@@ -56,4 +63,4 @@ subplot(2,1,2);
 plot(omega,angle_h) 
 xlabel('angular frequency i.e. omega -->'); 
 ylabel('Phase in radian-->'); 
-title('Phase response of LPF');
+title('Phase response of HPF');
