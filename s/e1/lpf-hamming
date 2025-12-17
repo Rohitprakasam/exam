@@ -1,0 +1,56 @@
+%Program for FIR lowpass filter using Hamming window 
+clc; 
+close all; 
+clear all; 
+fprintf('Program for Butterworth FIR lowpass filter\n\n'); 
+
+%Getting the order of the filter as input 
+N=input('Enter order of the filter:'); 
+
+%We get the cutoof frequency here, passedge frequency in Hz 
+fc=input('\nPlease enter the cutoff frequency:');
+--------------%2000------------
+
+%fs_min should be twice the maximum frequency. Here, fs_min = 2*fc2. 
+fs_min = 2*fc;
+-------------%4000-------------- 
+
+fprintf('\nPlease enter the sampling frequency greater than %d\n',fs_min'); 
+fs_sf=input('Please enter the sampling frequency:');
+--------------%8000;---------------
+
+%We need to find digital w. w = (2*pi*f)*Ts = (2*pi*f)/fs 
+wc = 2*pi*fc/fs_sf; 
+%phase delay = (N-1)/2 
+alp = (N-1)/2; 
+for n = 1:1:N 
+if n-1 == alp 
+hd(n) = wc/pi; 
+else 
+hd(n) = (sin((n-1-alp)*wc))/(pi*(n-alp-1)); 
+end 
+
+%Hamming window function 
+hammwin(n) = 0.54 - 0.46*cos(2*pi*(n-1)/(N-1)); 
+end 
+
+%h(n) = hd(n) * w(n) 
+hw = hd.*hammwin; 
+[h om]=freqz(hw,1,50); 
+%Finding the magnitude response. Note: log10 should be used. 
+%Plotting magnitude versus omega. 
+mag_h = abs(h); 
+figure(1); 
+subplot(2,1,1); 
+plot(om,mag_h); 
+xlabel('w normalised to pi -->'); 
+ylabel('Gain-->'); 
+title('Magnitude response of LPF'); 
+%Finding the phase response. 
+%Plotting phase versus omega. 
+angle_h = angle(h); 
+subplot(2,1,2); 
+plot(om,angle_h); 
+xlabel('w normalised to pi -->'); 
+ylabel('Phase -->'); 
+title('Phase response of LPF');
