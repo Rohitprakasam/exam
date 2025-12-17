@@ -1,14 +1,17 @@
 1.	Generation of elementary discrete-time sequences
   #dts
+
 2.	Linear convolution of a sequence
   #lcs
+
 3.	Circular convolution of a sequence using FFT
   #ccs
+
 4.	Circular convolution using in-built function
   #ccb
+
 5.	Auto-correlation of a sequence
   #acs
-==>Frequency Analysis
 
 6.	Frequency analysis using DFT (DISCRETE FOURIER TRANSFORM )
   #dft
@@ -20,31 +23,46 @@
 
 9.	IFFT
   #ifft
-	==>Filter Design
-  
-9.	FIR LPF using hamming window 
-  #lpf-hamming
-10.	FIR HPF using hamming window 
-  #hpf-hamming
-11.	BPF using rectangular window ( fourier series method ) 
-  #bpf-rectangular
-12.	Design of Chebyshev IIR filters (LPF / HPF) and demonstrate the filtering operations
-  #
-13.	Design of Chebyshev IIR filters (BPF / BSF) and demonstrate the filtering operations
-  #
-==>DSP Processor-Based Implementation
 
-14.	Study of architecture of digital signal processor
-  #
-15.	Perform MAC operation using various addressing modes - Study of direct addressing mode
-  #
-16.	Generation of various signals and random noise
-  #
-17.	Square waveform generation using TMS320C50 processor
-  #
-18.	Triangular waveform generation using TMS320C50 processor
-  #
-19.	Saw-tooth waveform generation using TMS320C50 processor
-  #
-20.	Circular convolution using TMS320C50 processor
-  #
+10.	FIR LPF using hamming window 
+  #lpf-hamming
+
+11.	FIR HPF using hamming window 
+  #hpf-hamming
+
+12.	BPF using rectangular window ( fourier series method ) 
+  #bpf-rectangular
+
+13.	DESIGN OF ANALOG LOW PASS BUTTERWORTH FILTER
+  #analog-lpf
+
+14.	Design of analog highpass butterworth filter
+  #analog-hpf
+
+15.	design of analog bandpass butterworth filter
+  #analog-bpf
+
+16.	design of analog band stop butterworth filter 
+  #analog-bsf
+
+17. design of analog chebyshev low pass filter
+  #analog-cheby-lpf
+
+18.	design of analog chebyshev high pass filter
+  #analog-cheby-hpf
+
+19.	design of analog chebyshev band pass filter
+  #analog-cheby-bpf
+
+20.	design of analog chebyshev bandstop filter
+  #analog-cheby-bsf
+
+21.	design of digital butterworth filter using impulse invariance method
+  #digi-butter-impulse
+
+22. design of digital chebyshev type-1 filter using bilinear method 
+  #digi-cheby-bilinear
+
+23. design of digital butterworth filter using bilinear transformation method 
+ #digi-butter-bilinear
+
