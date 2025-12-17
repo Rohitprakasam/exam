@@ -24,45 +24,45 @@
 2d.	IFFT
   #ifft
 
-2e.	FIR LPF using hamming window 
+3a.	FIR LPF using hamming window 
   #lpf-hamming
 
-3a.	FIR HPF using hamming window 
+3b.	FIR HPF using hamming window 
   #hpf-hamming
 
-3b.	BPF using rectangular window ( fourier series method ) 
+3c.	BPF using rectangular window ( fourier series method ) 
   #bpf-rectangular
 
-3c.	DESIGN OF ANALOG LOW PASS BUTTERWORTH FILTER
+4a.	DESIGN OF ANALOG LOW PASS BUTTERWORTH FILTER
   #analog-lpf
 
-4a.	Design of analog highpass butterworth filter
+4b.	Design of analog highpass butterworth filter
   #analog-hpf
 
-4b.	design of analog bandpass butterworth filter
+4c.	design of analog bandpass butterworth filter
   #analog-bpf
 
-4c.	design of analog band stop butterworth filter 
+4d.	design of analog band stop butterworth filter 
   #analog-bsf
 
-4d. design of analog chebyshev low pass filter
+4e. design of analog chebyshev low pass filter
   #analog-cheby-lpf
 
-4e.	design of analog chebyshev high pass filter
+4f.	design of analog chebyshev high pass filter
   #analog-cheby-hpf
 
-4f.	design of analog chebyshev band pass filter
+4g.	design of analog chebyshev band pass filter
   #analog-cheby-bpf
 
-4g.	design of analog chebyshev bandstop filter
+4h.	design of analog chebyshev bandstop filter
   #analog-cheby-bsf
 
-4h.	design of digital butterworth filter using impulse invariance method
+5a.	design of digital butterworth filter using impulse invariance method
   #digi-butter-impulse
 
-5a. design of digital chebyshev type-1 filter using bilinear method 
+5b. design of digital chebyshev type-1 filter using bilinear method 
   #digi-cheby-bilinear
 
-5b. design of digital butterworth filter using bilinear transformation method 
+5c. design of digital butterworth filter using bilinear transformation method 
  #digi-butter-bilinear
 
