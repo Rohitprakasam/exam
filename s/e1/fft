@@ -1,0 +1,51 @@
+% Program to compute FFT of a sequence
+clc;
+clear all;
+close all;
+
+disp('This is the program to compute FFT using inbuilt command');
+fprintf('\n');
+
+% Getting the input sequence
+x = input('Enter the sequence : ');
+len_x = length(x);
+
+% Getting the N-point value
+N = input('Enter the N-pt value: ');
+
+% Computing the FFT of the input sequence
+x_fft = fft(x,N);
+
+% Displaying the output
+disp('The FFT of the input sequence is ');
+disp(x_fft);
+
+% Computing the magnitude and phase of the FFT sequence
+mag_x_fft = abs(x_fft);
+phase_x_fft = angle(x_fft);
+
+% Displaying the input sequence
+figure(1);
+
+subplot(3,1,1);
+ax = 0:1:len_x-1;
+stem(ax,x);
+xlabel('samples n ->');
+ylabel('amplitude');
+title('Input sequence x(n)');
+
+% Displaying the magnitude of FFT
+subplot(3,1,2);
+am = 0:1:N-1;
+stem(am,mag_x_fft);
+xlabel('k ->');
+ylabel('|X(k)|');
+title('FFT - Magnitude response');
+
+% Displaying the phase of FFT
+subplot(3,1,3);
+ap = 0:1:N-1;
+stem(ap,phase_x_fft);
+xlabel('k->');
+ylabel('Angle(X(k))');
+title('FFT - Phase response');
