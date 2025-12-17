@@ -34,16 +34,16 @@
   #bpf-rectangular
 
 4a.	DESIGN OF ANALOG LOW PASS BUTTERWORTH FILTER
-  #analog-lpf
+  #analog-butter-lpf
 
 4b.	Design of analog highpass butterworth filter
-  #analog-hpf
+  #analog-butter-hpf
 
 4c.	design of analog bandpass butterworth filter
-  #analog-bpf
+  #analog-butter-bpf
 
 4d.	design of analog band stop butterworth filter 
-  #analog-bsf
+  #analog-butter-bsf
 
 4e. design of analog chebyshev low pass filter
   #analog-cheby-lpf
