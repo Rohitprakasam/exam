@@ -1,0 +1,33 @@
+#include <stdio.h> // Fixed the missing header
+
+int linear_search(int arr[], int n, int key) {
+    for (int i = 0; i < n; ++i) {
+        if (arr[i] == key)
+            return i; // return index if found
+    }
+    return -1; // not found
+}
+
+int main() {
+    int arr[] = {5, 3, 8, 4, 2, 9, 1};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int key = 4;
+
+    printf("Array: ");
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    printf("Searching for: %d\n", key);
+    
+    int idx = linear_search(arr, n, key);
+    
+    if (idx != -1) {
+        printf("Result: Element %d found at index %d.\n", key, idx);
+    } else {
+        printf("Result: Element %d not found in the array.\n", key);
+    }
+
+    return 0;
+}
