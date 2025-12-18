@@ -1,0 +1,53 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#define N 4 
+int goal[N][N] = { 
+{1, 2, 3, 4}, 
+{5, 6, 7, 8}, 
+{9,10,11,12}, 
+    {13,14,15, 0} 
+}; 
+// Count misplaced tiles 
+int calculateCost(int state[N][N]) { 
+    int cost = 0; 
+    for (int i=0; i<N; i++) 
+        for (int j=0; j<N; j++) 
+            if (state[i][j] && state[i][j] != goal[i][j]) 
+                cost++; 
+    return cost; 
+} 
+// Print the puzzle 
+void printPuzzle(int puzzle[N][N]) { 
+    for (int i=0; i<N; i++) { 
+        for (int j=0; j<N; j++) 
+            printf("%2d ", puzzle[i][j]); 
+        printf("\n"); 
+    } 
+    printf("\n"); 
+} 
+int main() { 
+    int puzzle[N][N] = { 
+        {1, 2, 3, 4}, 
+        {5, 6, 0, 8}, 
+        {9,10,7,11}, 
+        {13,14,15,12} 
+    }; 
+    printf("Initial State:\n"); 
+    printPuzzle(puzzle); 
+    int cost = calculateCost(puzzle); 
+    printf("Heuristic (misplaced tiles) = %d\n", cost); 
+    printf("Level = 0\n"); 
+    printf("Total cost f = g + h = %d\n", cost); 
+    printf("\nPossible Moves:\n"); 
+    printf("Move blank tile (0) → Right or Down to generate next states.\n"); 
+    printf("\nSimulated next state after moving blank Down:\n"); 
+    int next[N][N] = { 
+        {1, 2, 3, 4}, 
+        {5, 6, 7, 8}, 
+        {9,10,0,11}, 
+        {13,14,15,12} 
+    }; 
+    printPuzzle(next); 
+    printf("New cost = %d\n", calculateCost(next)); 
+    return 0; 
+}
