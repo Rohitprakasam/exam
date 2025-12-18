@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <conio.h>
+
+int main()
+{
+    int list[20], size, i, sElement;
+
+    printf("Enter size of the list: ");
+    scanf("%d", &size);
+
+    if (size > 20 || size <= 0)
+    {
+        printf("Invalid size.\n");
+        return 1;
+    }
+
+    printf("Enter any %d integer values: ", size);
+    for (i = 0; i < size; i++)
+        scanf("%d", &list[i]);
+
+    printf("Enter the element to be searched: ");
+    scanf("%d", &sElement);
+
+    // Linear Search Logic
+    for (i = 0; i < size; i++)
+    {
+        if (sElement == list[i])
+        {
+            printf("Element is found at index %d", i)
