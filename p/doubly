@@ -1,0 +1,149 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+struct info {
+    int data;
+    struct info *next;
+    struct info *prev;
+};
+
+struct info *head = NULL, *temp = NULL, *disp = NULL;
+
+void additem();
+void delitem();
+void display();
+int size();
+void search();
+
+int main() {
+    int choice;
+    while (1) {
+        printf("\n--- Doubly Linked List Menu ---");
+        printf("\n1. Add records\n2. Delete records\n3. Display records");
+        printf("\n4. Count items\n5. Search item\n6. Exit");
+        printf("\nEnter choice: ");
+        if (scanf("%d", &choice) != 1) break;
+
+        switch (choice) {
+            case 1: additem(); break;
+            case 2: delitem(); break;
+            case 3: display(); break;
+            case 4: printf("\nThe size of the list is %d\n", size()); break;
+            case 5: search(); break;
+            case 6: exit(0);
+            default: printf("\nWrong Choice!");
+        }
+    }
+    return 0;
+}
+
+void additem() {
+    struct info *add;
+    char proceed = 'y';
+    while (toupper(proceed) == 'Y') {
+        add = (struct info*)malloc(sizeof(struct info));
+        printf("Enter data: ");
+        scanf("%d", &add->data);
+        
+        if (head == NULL) {
+            head = add;
+            add->next = NULL;
+            add->prev = NULL;
+            temp = add; // temp acts as our 'tail' pointer
+        } else {
+            temp->next = add;
+            add->prev = temp;
+            add->next = NULL;
+            temp = add;
+        }
+        printf("Proceed y/n? ");
+        scanf(" %c", &proceed);
+    }
+}
+
+void delitem() {
+    int x;
+    struct info *p;
+    if (head == NULL) {
+        printf("\nNo items in the list");
+        return;
+    }
+    printf("\nEnter data to delete: ");
+    scanf("%d", &x);
+
+    p = head;
+    // Special case: Deleting the head node
+    if (head->data == x) {
+        head = head->next;
+        if (head != NULL) head->prev = NULL;
+        else temp = NULL; // List became empty
+        free(p);
+        printf("\nDeleted successfully.");
+        return;
+    }
+
+    // Search for the node
+    p = head->next;
+    while (p != NULL) {
+        if (p->data == x) {
+            p->prev->next = p->next;
+            if (p->next != NULL) {
+                p->next->prev = p->prev;
+            } else {
+                temp = p->prev; // Node was the tail, update temp
+            }
+            free(p);
+            printf("\nDeleted successfully.");
+            return;
+        }
+        p = p->next;
+    }
+    printf("\nData not found.");
+}
+
+void display() {
+    if (head == NULL) {
+        printf("\nNo data to display");
+        return;
+    }
+    printf("\nForward: ");
+    for (disp = head; disp != NULL; disp = disp->next) {
+        printf("%d <-> ", disp->data);
+    }
+    printf("NULL");
+
+    printf("\nBackward: ");
+    for (disp = temp; disp != NULL; disp = disp->prev) {
+        printf("%d <-> ", disp->data);
+    }
+    printf("NULL\n");
+}
+
+int size() {
+    int count = 0;
+    disp = head;
+    while (disp != NULL) {
+        count++;
+        disp = disp->next;
+    }
+    return count;
+}
+
+void search() {
+    int titem, found = 0;
+    if (head == NULL) {
+        printf("\nNo data in the list");
+        return;
+    }
+    printf("\nEnter the no. to search: ");
+    scanf("%d", &titem);
+    for (disp = head; disp != NULL; disp = disp->next) {
+        if (disp->data == titem) {
+            found = 1;
+            break;
+        }
+    }
+    if (found) printf("Present in the list.");
+    else printf("Not present in the list.");
+}
