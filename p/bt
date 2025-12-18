@@ -1,0 +1,101 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct treenode {
+    int data;
+    struct treenode *left;
+    struct treenode *right;
+} tnode;
+
+// Function Prototypes
+tnode *insertion(int, tnode*);
+void preorder(tnode *);
+void inorder(tnode *);
+void postorder(tnode *);
+
+int main() {
+    tnode *T = NULL;
+    int ch1, n;
+    char ch2;
+
+    do {
+        printf("\n\t\t**** Operation With Tree ****");
+        printf("\n\t1. Insertion");
+        printf("\n\t2. Inorder Traversal");
+        printf("\n\t3. Preorder Traversal");
+        printf("\n\t4. Postorder Traversal");
+        printf("\n\tEnter Your Choice: ");
+        scanf("%d", &ch1);
+
+        switch (ch1) {
+            case 1:
+                printf("\nEnter the element to be inserted: ");
+                scanf("%d", &n);
+                T = insertion(n, T);
+                break;
+            case 2:
+                printf("\nInorder Traversal: ");
+                inorder(T);
+                break;
+            case 3:
+                printf("\nPreorder Traversal: ");
+                preorder(T);
+                break;
+            case 4:
+                printf("\nPostorder Traversal: ");
+                postorder(T);
+                break;
+            default:
+                printf("\nInvalid Option");
+                break;
+        }
+
+        printf("\n\nDo you want to continue (y/n)? ");
+        scanf(" %c", &ch2); // Space before %c handles the leftover newline
+    } while (ch2 == 'y' || ch2 == 'Y');
+
+    return 0;
+}
+
+tnode *insertion(int x, tnode *T) {
+    if (T == NULL) {
+        T = (tnode *)malloc(sizeof(tnode));
+        if (T == NULL) {
+            printf("\nOut of space!");
+        } else {
+            T->data = x;
+            T->left = T->right = NULL;
+        }
+    } else {
+        if (x < (T->data)) {
+            T->left = insertion(x, T->left);
+        } else if (x > (T->data)) {
+            T->right = insertion(x, T->right);
+        }
+    }
+    return T;
+}
+
+void preorder(tnode *T) {
+    if (T != NULL) {
+        printf("%d\t", T->data);
+        preorder(T->left);
+        preorder(T->right);
+    }
+}
+
+void inorder(tnode *T) {
+    if (T != NULL) {
+        inorder(T->left);
+        printf("%d\t", T->data);
+        inorder(T->right);
+    }
+}
+
+void postorder(tnode *T) {
+    if (T != NULL) {
+        postorder(T->left);
+        postorder(T->right);
+        printf("%d\t", T->data);
+    }
+}
