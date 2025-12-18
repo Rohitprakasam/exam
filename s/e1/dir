@@ -46,22 +46,22 @@
   #analog-butter-bsf
 
 4e. design of analog chebyshev low pass filter
-  #analog-cheby-lpf
+  #analog-chebyshev-lpf
 
 4f.	design of analog chebyshev high pass filter
-  #analog-cheby-hpf
+  #analog-chebyshev-hpf
 
 4g.	design of analog chebyshev band pass filter
-  #analog-cheby-bpf
+  #analog-chebyshev-bpf
 
 4h.	design of analog chebyshev bandstop filter
-  #analog-cheby-bsf
+  #analog-chebyshev-bsf
 
 5a.	design of digital butterworth filter using impulse invariance method
   #digi-butter-impulse
 
 5b. design of digital chebyshev type-1 filter using bilinear method 
-  #digi-cheby-bilinear
+  #digi-chebyshev-bilinear
 
 5c. design of digital butterworth filter using bilinear transformation method 
  #digi-butter-bilinear
