@@ -59,3 +59,6 @@ void main()
 
     getch();
 }
+
+output
+10 -> 20 -> 30 -> NULL
