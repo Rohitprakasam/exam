@@ -1,0 +1,139 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+struct info {
+    int data;
+    struct info *next;
+};
+
+// Initialize head to NULL to ensure the list starts empty
+struct info *head = NULL, *temp = NULL, *disp = NULL;
+
+void additem();
+void delitem();
+void display();
+int size();
+void search();
+
+int main() { // Standard C uses int main()
+    int choice;
+    while (1) {
+        printf("\n1. Add records");
+        printf("\n2. Delete records");
+        printf("\n3. Display records");
+        printf("\n4. Count no. of items");
+        printf("\n5. Search an item");
+        printf("\n6. Exit");
+        printf("\nEnter your choice: ");
+        
+        if (scanf("%d", &choice) != 1) break;
+
+        switch (choice) {
+            case 1: additem(); break;
+            case 2: delitem(); break;
+            case 3: display(); break;
+            case 4: printf("\nThe size of the list is %d\n", size()); break;
+            case 5: search(); break;
+            case 6: exit(0);
+            default: printf("\nInvalid choice!");
+        }
+    }
+    return 0;
+}
+
+void additem() {
+    struct info *add;
+    char proceed = 'y';
+    while (toupper(proceed) == 'Y') {
+        add = (struct info*)malloc(sizeof(struct info));
+        if (add == NULL) {
+            printf("Memory allocation failed!");
+            return;
+        }
+        printf("Enter data: ");
+        scanf("%d", &add->data);
+        add->next = NULL;
+
+        if (head == NULL) {
+            head = add;
+            temp = add;
+        } else {
+            temp->next = add;
+            temp = add;
+        }
+        printf("Want to proceed y/n? ");
+        scanf(" %c", &proceed); // The space before %c skips the previous newline
+    }
+}
+
+void delitem() {
+    struct info *curr, *prev;
+    int tdata;
+    if (head == NULL) {
+        printf("\nNo records to delete");
+        return;
+    }
+    printf("\nEnter the data to delete: ");
+    scanf("%d", &tdata);
+
+    prev = curr = head;
+    while ((curr != NULL) && (curr->data != tdata)) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (curr == NULL) {
+        printf("\nData not found");
+        return;
+    }
+
+    if (curr == head) {
+        head = head->next;
+    } else {
+        prev->next = curr->next;
+        if (curr->next == NULL) { // Update tail pointer if last element is deleted
+            temp = prev;
+        }
+    }
+    free(curr);
+    printf("\nDeleted successfully.");
+}
+
+void display() {
+    if (head == NULL) {
+        printf("\nNo data to display");
+        return;
+    }
+    printf("\nList elements: ");
+    for (disp = head; disp != NULL; disp = disp->next) {
+        printf("%d -> ", disp->data);
+    }
+    printf("NULL\n");
+}
+
+int size() {
+    int count = 0;
+    for (struct info *countPtr = head; countPtr != NULL; countPtr = countPtr->next) {
+        count++;
+    }
+    return count;
+}
+
+void search() {
+    int titem, found = 0;
+    if (head == NULL) {
+        printf("\nNo data in the list");
+        return;
+    }
+    printf("\nEnter the no. to search: ");
+    scanf("%d", &titem);
+    for (disp = head; disp != NULL; disp = disp->next) {
+        if (disp->data == titem) {
+            found = 1;
+            break;
+        }
+    }
+    if (found) printf("\nSearch no. is present in the list");
+    else printf("\nSearch no. is not present in the list");
+}
