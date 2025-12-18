@@ -1,0 +1,26 @@
+4 A#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+
+#define MAX 20
+
+/* Function declarations */
+void create();
+void insert();
+void deletion();
+void search();
+void display();
+
+/* Global variables */
+int b[MAX], n = 0, i, pos, e, p;
+
+int main()
+{
+    int ch;
+    char g = 'y';
+
+    do
+    {
+        printf("\n--- MAIN MENU ---");
+        printf("\n1. Create");
+        printf("\n2. Delete");
