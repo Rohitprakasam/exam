@@ -1,0 +1,42 @@
+%  0.6 < |H(ejw)| < 1 for 0 < w < 0.35pi 
+% |H(ejw)| < 0.1  for 0.7pi < w < pi 
+
+clc 
+clear all 
+close all 
+wp = 0.35*pi; 
+ws = 0.7*pi; 
+T=1; 
+%T is not given in the question. So, take T=1 
+%iit method of freq. conversion 
+omegap = (2/T)*tan(wp/2); 
+omegas = (2/T)*tan(ws/2); 
+delp = 0.6; 
+dels = 0.1; 
+alphap = -20*log10(delp); 
+alphas = -20*log10(dels); 
+%Finding analog filter coefficients first 
+[N omegac] = cheb1ord(omegap,omegas,alphap,alphas,'s'); 
+[b a] = cheby1(N,alphap,omegac,'s'); 
+tf(b,a) %Transfer function of H(s) 
+%Finding digital filter coefficients 
+[c d] = bilinear(b,a,(1/T)); 
+[h w] = freqz(c,d,50); 
+tf(c,d,-1) %Transfer function of H(z) 
+mag = abs(h); 
+phase = angle(h); 
+subplot(2,1,1) 
+plot(w,mag); 
+xlabel('angular frequency i.e. w -->'); 
+ylabel('Gain -->'); 
+title('Magnitude response of LPF'); 
+subplot(2,1,2) 
+plot(w,phase); 
+xlabel('angular frequency i.e. w -->'); 
+ylabel('Phase in radian-->'); 
+title('Phase response of LPF'); 
+%Finding poles and zeros of H(z) 
+[z p] = tf2zp(c,d) 
+%Plotting poles and zeros 
+figure(2); 
+zplane(c,d);
