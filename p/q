@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define n 5
+
+void main() {
+    int queue[n], ch = 1, front = 0, rear = 0, i, j = 1, x = n;
+    printf("Queue using Array (Size: %d)", n);
+    printf("\n1.Insertion \n2.Deletion \n3.Display \n4.Exit");
+    while (ch) {
+        printf("\nEnter the Choice: ");
+        if (scanf("%d", &ch) != 1) break; 
+        switch (ch) {
+            case 1:
+                if (rear == n) {
+                    printf("\nQueue is Full (Linear limit reached)");
+                } else {
+                    printf("Enter no %d: ", j++);
+                    scanf("%d", &queue[rear++]);
+                }
+                break;
+            case 2:
+                if (front == rear) {
+                    printf("\nQueue is empty");
+                } else {
+                    printf("\nDeleted Element is %d", queue[front++]);
+                }
+                break;
+            case 3:
+                if (front == rear) {
+                    printf("\nQueue is Empty");
+                } else {
+                    printf("\nQueue Elements are:\n");
+                    for (i = front; i < rear; i++) {
+                        printf("%d\n", queue[i]);
+                    }
+                }
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("\nWrong Choice: please see the options");
+                break;
+        }
+    }
+}
