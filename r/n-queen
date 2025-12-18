@@ -1,0 +1,74 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+int N; 
+int *cols;    // cols[c] == 1 if column c has a queen 
+int *d1;      
+int *d2;      
+// d1[r+c] for main diagonals 
+// d2[r-c + (N-1)] for anti-diagonals 
+int *board;   // board[r] = column of queen in row r 
+long long solution_count = 0; 
+void print_board(void) { 
+for (int r = 0; r < N; ++r) { 
+        for (int c = 0; c < N; ++c) { 
+            putchar(board[r] == c ? 'Q' : '.'); 
+            if (c < N-1) putchar(' '); 
+        } 
+        putchar('\n'); 
+    } 
+    putchar('\n'); 
+} 
+ 
+void solve_row(int r) { 
+    if (r == N) { 
+        // found one solution 
+        solution_count++; 
+        print_board(); 
+        return; 
+    } 
+ 
+    for (int c = 0; c < N; ++c) { 
+        int id1 = r + c; 
+        int id2 = r - c + (N - 1); 
+        if (!cols[c] && !d1[id1] && !d2[id2]) { 
+            // place queen 
+            board[r] = c; 
+            cols[c] = d1[id1] = d2[id2] = 1; 
+ 
+            solve_row(r + 1); 
+ 
+            // backtrack 
+            cols[c] = d1[id1] = d2[id2] = 0; 
+        } 
+    } 
+} 
+ 
+int main(void) { 
+    printf("Enter N (number of queens, e.g. 8): "); 
+    if (scanf("%d", &N) != 1 || N <= 0) { 
+        fprintf(stderr, "Invalid N.\n"); 
+        return 1; 
+    } 
+ 
+    // allocate arrays 
+    cols = (int*)calloc(N, sizeof(int)); 
+    d1   = (int*)calloc(2 * N, sizeof(int));       // indices 0..2N-2 
+    d2   = (int*)calloc(2 * N, sizeof(int));       // indices 0..2N-2 
+    board= (int*)malloc(N * sizeof(int)); 
+ 
+    if (!cols || !d1 || !d2 || !board) { 
+        fprintf(stderr, "Memory allocation failed.\n"); 
+        return 1; 
+    } 
+ 
+    printf("\nAll solutions for %d-Queens:\n\n", N); 
+    solve_row(0); 
+ 
+    printf("Total solutions: %lld\n", solution_count); 
+ 
+    free(cols); 
+    free(d1); 
+    free(d2); 
+    free(board); 
+    return 0; 
+} 
