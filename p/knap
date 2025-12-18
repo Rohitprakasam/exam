@@ -1,0 +1,74 @@
+#include <stdio.h>
+
+typedef struct {
+    int value;
+    int weight;
+    double ratio;
+} Item;
+
+// Greedy approach: Sort items by their value-to-weight density
+void sortByRatio(Item items[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (items[j].ratio > items[i].ratio) {
+                Item temp = items[i];
+                items[i] = items[j];
+                items[j] = temp;
+            }
+        }
+    }
+}
+
+double fractionalKnapsack(Item items[], int n, int capacity) {
+    sortByRatio(items, n);
+    
+    double totalValue = 0.0;
+    int remainingCapacity = capacity;
+
+    printf("\n--- Greedy Selection (Sorted by Ratio) ---\n");
+    for (int i = 0; i < n; i++) {
+        printf("Item %d: Value = %d, Weight = %d, Ratio = %.2lf\n", 
+                i + 1, items[i].value, items[i].weight, items[i].ratio);
+    }
+
+    printf("\nFilling knapsack with capacity %d:\n", capacity);
+    for (int i = 0; i < n; i++) {
+        if (items[i].weight <= remainingCapacity) {
+            // Take the whole item
+            totalValue += items[i].value;
+            remainingCapacity -= items[i].weight;
+            printf("Full item %d taken. Remaining cap: %d, Total: %.2lf\n", 
+                    i + 1, remainingCapacity, totalValue);
+        } else {
+            // Take a fraction of the item
+            double fraction = (double)remainingCapacity / items[i].weight;
+            totalValue += items[i].value * fraction;
+            printf("Fraction %.2lf of item %d taken. Total: %.2lf\n", 
+                    fraction, i + 1, totalValue);
+            remainingCapacity = 0;
+            break;
+        }
+    }
+    return totalValue;
+}
+
+int main() {
+    int n, capacity;
+    printf("Enter number of items: ");
+    if(scanf("%d", &n) != 1) return 1;
+
+    Item items[n];
+    for (int i = 0; i < n; i++) {
+        printf("Enter value and weight of item %d: ", i + 1);
+        scanf("%d %d", &items[i].value, &items[i].weight);
+        items[i].ratio = (double)items[i].value / items[i].weight;
+    }
+
+    printf("Enter knapsack capacity: ");
+    scanf("%d", &capacity);
+
+    double maxValue = fractionalKnapsack(items, n, capacity);
+    printf("\nFinal Result: Maximum value = %.2lf\n", maxValue);
+
+    return 0;
+}
