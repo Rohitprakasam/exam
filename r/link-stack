@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h> // for exit()
+
+#define N 5
+
+int main()
+{
+    int queue[N], ch = 1, front = 0, rear = 0, i, j = 1;
+
+    printf("Queue using Array\n");
+    printf("1. Insertion\n2. Deletion\n3. Display\n4. Exit\n");
+
+    while (1)
+    {
+        printf("\nEnter the Choice: ");
+        scanf("%d", &ch);
+
+        switch (ch)
+        {
+        case 1: // Insertion
+            if (rear == N)
+            {
+                printf("\nQueue is Full\n");
+            }
+            else
+            {
+                printf("Enter number %d: ", j++);
+                scanf("%d", &queue[rear]);
+                rear++;
+            }
+            break;
+
+        case 2: // Deletion
+            if (front == rear)
+            {
+                printf("\nQueue is Empty\n");
+            }
+            else
+            {
+                printf("\nDeleted Element is %d\n", queue[front]);
+                front++;
+            }
+            break;
+
+        case 3: // Display
+            if (front == rear)
+            {
+                printf("\nQueue is Empty\n");
+            }
+            else
+            {
+                printf("\nQueue Elements are:\n");
+                for (i = front; i < rear; i++)
+                {
+                    printf("%d\n", queue[i]);
+                }
+            }
+            break;
+
+        case 4: // Exit
+            exit(0);
+
+        default:
+            printf("\nWrong Choice! Please see the options.\n");
+        }
+    }
+
+    return 0;
+}
