@@ -1,0 +1,55 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int v;
+    struct node *next;
+};
+
+struct node *G[10];
+int visited[10], n;
+
+void insert(int u, int v)
+{
+    struct node *t = (struct node*)malloc(sizeof(struct node));
+    t->v = v;
+    t->next = G[u];
+    G[u] = t;
+}
+
+void DFS(int u)
+{
+    struct node *p;
+    printf("%d ", u);
+    visited[u] = 1;
+
+    for(p = G[u]; p; p = p->next)
+        if(!visited[p->v])
+            DFS(p->v);
+}
+
+int main()
+{
+    int i, e, u, v;
+
+    printf("Enter vertices: ");
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++){
+        G[i]=NULL;
+        visited[i]=0;
+    }
+
+    printf("Enter edges: ");
+    scanf("%d",&e);
+
+    for(i=0;i<e;i++){
+        scanf("%d%d",&u,&v);
+        insert(u,v);
+    }
+
+    printf("DFS Traversal: ");
+    DFS(0);
+
+    return 0;
+}
