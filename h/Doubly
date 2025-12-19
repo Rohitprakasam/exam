@@ -1,0 +1,96 @@
+#include<stdio.h>
+#include<conio.h>
+#include<alloc.h>
+
+struct node
+{
+    int data;
+    struct node *prev,*next;
+};
+
+struct node *head=NULL,*tail=NULL;
+
+void insert()
+{
+    struct node *t;
+    t=(struct node*)malloc(sizeof(struct node));
+
+    printf("Enter data: ");
+    scanf("%d",&t->data);
+
+    t->next=NULL;
+    t->prev=tail;
+
+    if(head==NULL)
+        head=t;
+    else
+        tail->next=t;
+
+    tail=t;
+}
+
+void del()
+{
+    int x;
+    struct node *p;
+
+    if(head==NULL){
+        printf("List empty");
+        return;
+    }
+
+    printf("Enter data to delete: ");
+    scanf("%d",&x);
+
+    for(p=head;p!=NULL;p=p->next)
+        if(p->data==x){
+            if(p->prev) p->prev->next=p->next;
+            else head=p->next;
+
+            if(p->next) p->next->prev=p->prev;
+            else tail=p->prev;
+
+            free(p);
+            printf("Deleted");
+            return;
+        }
+
+    printf("Not found");
+}
+
+void display()
+{
+    struct node *p;
+    if(head==NULL){
+        printf("List empty");
+        return;
+    }
+
+    printf("Forward: ");
+    for(p=head;p!=NULL;p=p->next)
+        printf("%d ",p->data);
+
+    printf("\nBackward: ");
+    for(p=tail;p!=NULL;p=p->prev)
+        printf("%d ",p->data);
+}
+
+void main()
+{
+    int ch;
+    clrscr();
+
+    while(1)
+    {
+        printf("\n1.Insert\n2.Delete\n3.Display\n4.Exit\nChoice: ");
+        scanf("%d",&ch);
+
+        switch(ch)
+        {
+            case 1: insert(); break;
+            case 2: del(); break;
+            case 3: display(); break;
+            case 4: exit(0);
+        }
+    }
+}
