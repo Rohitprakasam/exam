@@ -1,0 +1,41 @@
+#include<stdio.h>
+
+int main()
+{
+    int n, cap, i, j;
+    float v[10], w[10], r[10], temp, profit=0;
+
+    printf("Enter number of items: ");
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++){
+        printf("Enter value and weight of item %d: ",i+1);
+        scanf("%f%f",&v[i],&w[i]);
+        r[i] = v[i]/w[i];
+    }
+
+    printf("Enter knapsack capacity: ");
+    scanf("%d",&cap);
+
+    /* sort by ratio */
+    for(i=0;i<n-1;i++)
+        for(j=i+1;j<n;j++)
+            if(r[i]<r[j]){
+                temp=r[i]; r[i]=r[j]; r[j]=temp;
+                temp=v[i]; v[i]=v[j]; v[j]=temp;
+                temp=w[i]; w[i]=w[j]; w[j]=temp;
+            }
+
+    for(i=0;i<n;i++){
+        if(w[i]<=cap){
+            profit += v[i];
+            cap -= w[i];
+        } else {
+            profit += r[i]*cap;
+            break;
+        }
+    }
+
+    printf("Maximum profit = %.2f",profit);
+    return 0;
+}
