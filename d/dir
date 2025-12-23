@@ -49,3 +49,9 @@ necessary  primary and foreign key constraints:
 Marks (Regno,Name , Dept, Subj1,Subj2,Subj3)
 #7
 
+
+[8]
+Create the following tables with the mapping given below.
+stu_details (reg_no, stu_name, DOB, address, city)
+mark_details (reg_no, mark1, mark2, mark3, total) 
+#8
