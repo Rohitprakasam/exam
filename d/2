@@ -1,0 +1,86 @@
+2️⃣ Create Tables with Primary & Foreign Key Constraints
+
+Dept Table
+
+CREATE TABLE Dept (
+    Deptno NUMBER PRIMARY KEY,
+    Dname VARCHAR2(30),
+    Loc VARCHAR2(30),
+    DeptmanagerId NUMBER
+);
+
+Employee Table
+
+CREATE TABLE Employee (
+    EmpId NUMBER PRIMARY KEY,
+    Empname VARCHAR2(30),
+    Sal NUMBER,
+    Deptno NUMBER,
+    CONSTRAINT fk_dept FOREIGN KEY (Deptno)
+    REFERENCES Dept(Deptno)
+);
+
+a) List the count of Employees and average salary of each department
+
+SELECT Deptno,
+       COUNT(EmpId) AS Employee_Count,
+       AVG(Sal) AS Average_Salary
+FROM Employee
+GROUP BY Deptno;
+
+b) List the employee name, department name and the salary of all employees
+
+SELECT e.Empname,
+       d.Dname,
+       e.Sal
+FROM Employee e
+JOIN Dept d
+ON e.Deptno = d.Deptno;
+
+c) Display the Employee name and the respective department manager name
+
+SELECT e.Empname AS Employee_Name,
+       m.Empname AS Manager_Name
+FROM Employee e
+JOIN Dept d
+ON e.Deptno = d.Deptno
+JOIN Employee m
+ON d.DeptmanagerId = m.EmpId;
+
+d) Create a Function to return Salary when EmpId is given
+(With Exception Handling – Oracle PL/SQL)
+
+
+CREATE OR REPLACE FUNCTION get_salary (
+    p_empid IN Employee.EmpId%TYPE
+) RETURN NUMBER IS
+    v_salary Employee.Sal%TYPE;
+BEGIN
+    SELECT Sal
+    INTO v_salary
+    FROM Employee
+    WHERE EmpId = p_empid;
+
+    RETURN v_salary;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+    WHEN OTHERS THEN
+        RETURN NULL;
+END;
+/
+
+▶ Function Call Example
+SELECT get_salary(101) FROM dual;
+
+
+🧪 Sample Data (Optional – for Testing)
+INSERT INTO Dept VALUES (10, 'IT', 'Chennai', 1);
+INSERT INTO Dept VALUES (20, 'HR', 'Bangalore', 3);
+
+INSERT INTO Employee VALUES (1, 'Ravi', 60000, 10);
+INSERT INTO Employee VALUES (2, 'Kumar', 45000, 10);
+INSERT INTO Employee VALUES (3, 'Sita', 50000, 20);
+
+COMMIT;
