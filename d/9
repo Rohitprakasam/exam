@@ -1,56 +1,103 @@
-EMPLOYEE & DEPARTMENT
+✅ Create Tables with Proper Mapping & Constraints
 
-Tables
-Copy code
-Sql
+Department Table
+
+
 CREATE TABLE Department (
-  Deptno NUMBER PRIMARY KEY,
-  Dname VARCHAR2(20),
-  Dloc VARCHAR2(20)
+    Deptno NUMBER PRIMARY KEY,
+    Dname VARCHAR2(30),
+    Dloc VARCHAR2(30)
 );
+
+Employee Table
+
 
 CREATE TABLE Employee (
-  Empno NUMBER PRIMARY KEY,
-  Ename VARCHAR2(30),
-  Job VARCHAR2(20),
-  MgrId NUMBER,
-  DoB DATE,
-  DoJ DATE,
-  Sal NUMBER,
-  Comm NUMBER,
-  Deptno NUMBER REFERENCES Department(Deptno)
+    Empno NUMBER PRIMARY KEY,
+    Ename VARCHAR2(30),
+    Job VARCHAR2(20),
+    MgrId NUMBER,
+    DoB DATE,
+    DoJ DATE,
+    Sal NUMBER,
+    Comm NUMBER,
+    Deptno NUMBER,
+    CONSTRAINT fk_emp_dept FOREIGN KEY (Deptno)
+    REFERENCES Department(Deptno)
 );
 
-a) Experience ordered by salary
-Copy code
-Sql
-SELECT Empno, Ename, Sal,
-FLOOR(MONTHS_BETWEEN(SYSDATE, DoJ)/12) Experience
+a) Display Emp no, Name, Salary and Experience
+(Ordered by Salary – Highest to Lowest)
+
+
+SELECT Empno,
+       Ename,
+       Sal,
+       TRUNC(MONTHS_BETWEEN(SYSDATE, DoJ) / 12) AS Experience_Years
 FROM Employee
 ORDER BY Sal DESC;
 
-b) Marketing employees
-Copy code
-Sql
-SELECT Ename FROM Employee e JOIN Department d
-ON e.Deptno=d.Deptno
-WHERE d.Dname='Marketing';
+b) List the names of employees working for “Marketing” department
 
-c) Born this month
-Copy code
-Sql
-SELECT Ename FROM Employee
-WHERE TO_CHAR(DoB,'MM')=TO_CHAR(SYSDATE,'MM');
 
-d) Function
-Copy code
-Sql
-CREATE OR REPLACE FUNCTION emp_details(p_empno NUMBER)
-RETURN VARCHAR2 IS v_name VARCHAR2(30);
+SELECT e.Ename
+FROM Employee e
+JOIN Department d
+ON e.Deptno = d.Deptno
+WHERE d.Dname = 'Marketing';
+
+c) List the names of employees born in the current month
+
+
+SELECT Ename
+FROM Employee
+WHERE TO_CHAR(DoB, 'MM') = TO_CHAR(SYSDATE, 'MM');
+
+d) PL/SQL Function to display employee details when Empno is given
+(With Exception Handling)
+
+
+SET SERVEROUTPUT ON;
+
+CREATE OR REPLACE FUNCTION get_emp_details (
+    p_empno IN Employee.Empno%TYPE
+) RETURN VARCHAR2 IS
+    v_name Employee.Ename%TYPE;
+    v_job  Employee.Job%TYPE;
+    v_sal  Employee.Sal%TYPE;
 BEGIN
-  SELECT Ename INTO v_name FROM Employee WHERE Empno=p_empno;
-  RETURN v_name;
+    SELECT Ename, Job, Sal
+    INTO v_name, v_job, v_sal
+    FROM Employee
+    WHERE Empno = p_empno;
+
+    RETURN 'Name: ' || v_name ||
+           ', Job: ' || v_job ||
+           ', Salary: ' || v_sal;
+
 EXCEPTION
-  WHEN NO_DATA_FOUND THEN RETURN 'Not Found';
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'Employee not found';
+    WHEN OTHERS THEN
+        RETURN 'Error occurred';
 END;
 /
+
+
+▶ Function Call Example
+
+SELECT get_emp_details(101) FROM dual;
+
+
+
+🧪 Sample Data (Optional – For Testing)
+INSERT INTO Department VALUES (10, 'Marketing', 'Chennai');
+INSERT INTO Department VALUES (20, 'IT', 'Bangalore');
+
+INSERT INTO Employee VALUES
+(101, 'ARUN', 'Manager', NULL, DATE '1995-08-15', DATE '2018-06-01', 60000, 5000, 10);
+
+INSERT INTO Employee VALUES
+(102, 'KUMAR', 'Developer', 101, DATE '1998-09-20', DATE '2020-07-15', 45000, NULL, 20);
+
+COMMIT;
