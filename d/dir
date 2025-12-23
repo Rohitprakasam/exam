@@ -58,8 +58,9 @@ mark_details (reg_no, mark1, mark2, mark3, total)
 
 
 [9]
-Create the following tables with the mapping given below. Employee (Empno, Ename, Job, MgrId, DoB, DoJ, Sal, Comm, Deptno)
-Department (Dname, Deptno, Dloc)
+Create the following tables with the mapping given below. 
+Employee (Empno, Ename, Job, MgrId, DoB, DoJ, Sal, Comm, Deptno) 
+Department (Dname, Deptno, Dloc) 
 #9
 
 
@@ -116,6 +117,7 @@ BOOK_TICKET (PID, ROUTENO, JOURNEY_DATE, SEAT_NO)
 
 16. Consider the following tables. SAILOR(sid, sname, rating, age)
 BOATS(bid, bname, colour)
+
 RESERVES(sid, bid, day)
 #16
 
