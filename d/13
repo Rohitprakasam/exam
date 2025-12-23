@@ -1,0 +1,22 @@
+13. COMPANY DATABASE
+a) Dept salary
+Copy code
+Sql
+SELECT dept_no, SUM(salary), AVG(salary)
+FROM Emp_details GROUP BY dept_no;
+
+b) Total salary
+Copy code
+Sql
+SELECT SUM(salary) FROM Emp_details;
+
+c) Function
+Copy code
+Sql
+CREATE OR REPLACE FUNCTION fund_spent
+RETURN NUMBER IS v_fund NUMBER;
+BEGIN
+  SELECT fund_amount INTO v_fund FROM Administration;
+  RETURN v_fund;
+END;
+/
