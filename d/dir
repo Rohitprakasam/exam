@@ -17,3 +17,11 @@ specify the necessary primary and foreign key constraints:
 User (Userid, Name, Dept, Bookid, Accdate) 
 Book (Bookid, Book_name, Author, Publication, Price) 
 #3
+
+[4]
+4.Create the following tables with given attributes having appropriate data type and 
+specify the necessary primary and foreign key constraints: 
+Customer (Custid, Custname, Addr, phno,panno)
+Loan (Loanid, Amount, Interest, Custid) 
+Account (Acctno, Accbal, Custid) 
+#4
