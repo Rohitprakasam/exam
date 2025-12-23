@@ -1,0 +1,89 @@
+✅ Table Creation with Primary & Foreign Key Constraints
+
+Customer Table
+
+CREATE TABLE Customer (
+    Custid NUMBER PRIMARY KEY,
+    Custname VARCHAR2(30),
+    Phno VARCHAR2(15),
+    Pan VARCHAR2(15),
+    DOB DATE
+);
+
+HomeLoan Table
+
+CREATE TABLE HomeLoan (
+    HLoanid NUMBER PRIMARY KEY,
+    Amount NUMBER,
+    Custid NUMBER,
+    CONSTRAINT fk_homeloan_cust FOREIGN KEY (Custid)
+    REFERENCES Customer(Custid)
+);
+
+VehicleLoan Table
+
+CREATE TABLE VehicleLoan (
+    VLoanid NUMBER PRIMARY KEY,
+    Amount NUMBER,
+    Custid NUMBER,
+    CONSTRAINT fk_vehicleloan_cust FOREIGN KEY (Custid)
+    REFERENCES Customer(Custid)
+);
+
+a) List the Custid of customers who have both HomeLoan and VehicleLoan
+
+SELECT Custid
+FROM HomeLoan
+INTERSECT
+SELECT Custid
+FROM VehicleLoan;
+
+b) List the Custid of customers who do not have any loan
+
+SELECT Custid
+FROM Customer
+WHERE Custid NOT IN (
+    SELECT Custid FROM HomeLoan
+    UNION
+    SELECT Custid FROM VehicleLoan
+);
+
+c) Create a View with Customerid, Customer name, and Total Loan Amount
+
+CREATE VIEW Customer_Total_Loan AS
+SELECT c.Custid,
+       c.Custname,
+       NVL(h.Amount, 0) + NVL(v.Amount, 0) AS Total_Loan_Amount
+FROM Customer c
+LEFT JOIN HomeLoan h ON c.Custid = h.Custid
+LEFT JOIN VehicleLoan v ON c.Custid = v.Custid;
+
+▶ View Usage
+SELECT * FROM Customer_Total_Loan;
+
+d) Trigger to display HomeLoan details whenever a record is inserted
+
+SET SERVEROUTPUT ON;
+
+CREATE OR REPLACE TRIGGER display_homeloan_details
+AFTER INSERT ON HomeLoan
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Home Loan Inserted Successfully');
+    DBMS_OUTPUT.PUT_LINE('Loan ID   : ' || :NEW.HLoanid);
+    DBMS_OUTPUT.PUT_LINE('Customer ID: ' || :NEW.Custid);
+    DBMS_OUTPUT.PUT_LINE('Amount    : ' || :NEW.Amount);
+END;
+/
+
+
+🧪 Sample Data (Optional – for Testing)
+INSERT INTO Customer VALUES (1, 'ARUN', '9876543210', 'ABCDE1234F', DATE '1999-05-12');
+INSERT INTO Customer VALUES (2, 'KUMAR', '9123456789', 'PQRSX5678Z', DATE '2000-03-20');
+INSERT INTO Customer VALUES (3, 'SITA', '9000011111', 'LMNOP1111Q', DATE '1998-08-10');
+
+INSERT INTO HomeLoan VALUES (101, 500000, 1);
+INSERT INTO VehicleLoan VALUES (201, 200000, 1);
+INSERT INTO VehicleLoan VALUES (202, 150000, 2);
+
+COMMIT;
