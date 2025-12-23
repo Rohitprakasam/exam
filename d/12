@@ -1,0 +1,36 @@
+12. BOOK DATABASE
+Copy code
+Sql
+CREATE TABLE book (
+  book_name VARCHAR2(30),
+  author_name VARCHAR2(30),
+  price NUMBER,
+  quantity NUMBER
+);
+a) Double quantity
+Copy code
+Sql
+UPDATE book SET quantity=quantity*2;
+
+b) Costly books
+Copy code
+Sql
+SELECT book_name FROM book
+WHERE price > (SELECT price FROM book
+WHERE book_name='Database for Dummies');
+
+c) Author starts with A
+Copy code
+Sql
+SELECT author_name, book_name, price
+FROM book WHERE author_name LIKE 'A%';
+
+d) Procedure
+Copy code
+Sql
+CREATE OR REPLACE PROCEDURE count_books(p_author VARCHAR2) IS v_cnt NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO v_cnt FROM book WHERE author_name=p_author;
+  DBMS_OUTPUT.PUT_LINE(v_cnt);
+END;
+/
