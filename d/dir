@@ -19,9 +19,18 @@ Book (Bookid, Book_name, Author, Publication, Price)
 #3
 
 [4]
-4.Create the following tables with given attributes having appropriate data type and 
-specify the necessary primary and foreign key constraints: 
+Create the following tables with the given attributes having appropriate data type and 
+Specify the necessary primary and foreign key constraints: 
 Customer (Custid, Custname, Addr, phno,panno)
 Loan (Loanid, Amount, Interest, Custid) 
 Account (Acctno, Accbal, Custid) 
 #4
+
+[5]
+Create the following tables with the given attributes, having appropriate data type and 
+Specify the necessary primary and foreign key constraints: 
+Customer (Custid, Custname, phno, pan, DOB) 
+HomeLoan (HLoanid, Amount, Custid)  
+VehicleLoan (VLoanid, Amount, Custid) 
+#5
+
