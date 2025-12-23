@@ -5,3 +5,9 @@ Loan (Loanid, Amount, Custid, EMI)
 #1 
 
 [2]
+Create the following tables with given attributes having appropriate data type and 
+specify the necessary primary and foreign key constraints: 
+Employee (EmpId, Empname, Sal, Deptno) 
+Dept (Deptno, Dname, Loc,DeptmanagerId) 
+#2
+
