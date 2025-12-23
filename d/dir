@@ -43,3 +43,9 @@ a) Add a column reorder in the Product table having a value of 50 for all produc
 b) Create a Login form to validate a user. 
 #6
 
+[7]
+Create the following tables with given attributes having appropriate data type and specify the 
+necessary  primary and foreign key constraints: 
+Marks (Regno,Name , Dept, Subj1,Subj2,Subj3)
+#7
+
