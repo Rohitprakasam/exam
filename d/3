@@ -1,0 +1,88 @@
+1️⃣ Create Tables with Primary & Foreign Key Constraints
+Book Table
+
+CREATE TABLE Book (
+    Bookid NUMBER PRIMARY KEY,
+    Book_name VARCHAR2(50),
+    Author VARCHAR2(40),
+    Publication VARCHAR2(30),
+    Price NUMBER
+);
+
+User Table
+
+CREATE TABLE User1 (
+    Userid NUMBER PRIMARY KEY,
+    Name VARCHAR2(30),
+    Dept VARCHAR2(30),
+    Bookid NUMBER,
+    Accdate DATE,
+    CONSTRAINT fk_book FOREIGN KEY (Bookid)
+    REFERENCES Book(Bookid)
+);
+
+
+⚠️ USER is a reserved keyword in Oracle, so User1 is used.
+
+a) List the name of the user who had accessed the costliest book
+
+SELECT DISTINCT u.Name
+FROM User1 u
+JOIN Book b
+ON u.Bookid = b.Bookid
+WHERE b.Price = (SELECT MAX(Price) FROM Book);
+
+b) List the userid and count of books accessed by the user
+
+SELECT Userid,
+       COUNT(Bookid) AS Book_Count
+FROM User1
+GROUP BY Userid;
+
+c) List the books published by Wiley publisher
+
+SELECT Book_name
+FROM Book
+WHERE Publication = 'Wiley';
+
+d) PL/SQL Program to print book details when Bookid is given
+(With Exception Handling)
+
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    v_bookid Book.Bookid%TYPE := &Bookid;
+    v_name Book.Book_name%TYPE;
+    v_author Book.Author%TYPE;
+    v_pub Book.Publication%TYPE;
+    v_price Book.Price%TYPE;
+BEGIN
+    SELECT Book_name, Author, Publication, Price
+    INTO v_name, v_author, v_pub, v_price
+    FROM Book
+    WHERE Bookid = v_bookid;
+
+    DBMS_OUTPUT.PUT_LINE('Book Name     : ' || v_name);
+    DBMS_OUTPUT.PUT_LINE('Author        : ' || v_author);
+    DBMS_OUTPUT.PUT_LINE('Publication   : ' || v_pub);
+    DBMS_OUTPUT.PUT_LINE('Price         : ' || v_price);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No book found for given Book ID');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Some error occurred');
+END;
+/
+
+
+🧪 Sample Data (Optional – For Testing)
+INSERT INTO Book VALUES (101, 'DBMS', 'Navathe', 'Wiley', 650);
+INSERT INTO Book VALUES (102, 'OS Concepts', 'Silberschatz', 'Wiley', 720);
+INSERT INTO Book VALUES (103, 'Java', 'Herbert Schildt', 'McGraw', 550);
+
+INSERT INTO User1 VALUES (1, 'Ravi', 'IT', 102, SYSDATE);
+INSERT INTO User1 VALUES (2, 'Sita', 'CSE', 101, SYSDATE);
+INSERT INTO User1 VALUES (3, 'Arun', 'ECE', 102, SYSDATE);
+
+COMMIT;
