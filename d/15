@@ -1,0 +1,34 @@
+15. BUS RESERVATION
+a) DOB constraint
+Copy code
+Sql
+ALTER TABLE Passenger
+ADD CONSTRAINT chk_dob CHECK (DOB > DATE '2000-01-01');
+
+
+b) Mumbai → Chennai
+Copy code
+Sql
+SELECT Pname FROM Passenger p
+JOIN Book_Ticket b ON p.PID=b.PID
+JOIN Bus bu ON b.Routeno=bu.Routeno
+WHERE Source='Mumbai' AND Destination='Chennai'
+AND Journey_date='02-FEB-2019';
+
+c) Traveled >3 times
+Copy code
+Sql
+SELECT PID FROM Book_Ticket
+GROUP BY PID, Routeno
+HAVING COUNT(*)>3;
+
+
+
+d) View
+Copy code
+Sql
+CREATE VIEW route_view AS
+SELECT Routeno, Source, Destination, Journey_date
+FROM Bus b JOIN Book_Ticket t
+ON b.Routeno=t.Routeno
+WHERE Source='Chennai' AND Destination='Delhi';
