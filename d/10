@@ -1,0 +1,54 @@
+10. VOTER & BOOTH
+Tables
+Copy code
+Sql
+CREATE TABLE Booth (
+  Boothid NUMBER PRIMARY KEY,
+  Location VARCHAR2(30),
+  BIncharge VARCHAR2(30)
+);
+
+CREATE TABLE Voter (
+  VoterId NUMBER PRIMARY KEY,
+  Votername VARCHAR2(30),
+  Gender CHAR(1),
+  Boothid NUMBER REFERENCES Booth(Boothid),
+  Checkvote NUMBER
+);
+
+a) Counts
+Copy code
+Sql
+SELECT Boothid, COUNT(*) FROM Voter GROUP BY Boothid;
+
+SELECT COUNT(*) FROM Voter
+WHERE Gender='M' AND Checkvote=1;
+
+b) Total voted
+Copy code
+Sql
+SELECT COUNT(*) FROM Voter WHERE Checkvote=1;
+
+c) Booth details
+Copy code
+Sql
+SELECT b.Boothid, Location, COUNT(v.VoterId)
+FROM Booth b JOIN Voter v
+ON b.Boothid=v.Boothid
+WHERE Checkvote=1
+GROUP BY b.Boothid, Location;
+
+d) Function
+Copy code
+Sql
+CREATE OR REPLACE FUNCTION poll_percent(p_booth NUMBER)
+RETURN NUMBER IS v_total NUMBER; v_voted NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO v_total FROM Voter WHERE Boothid=p_booth;
+  SELECT COUNT(*) INTO v_voted FROM Voter
+  WHERE Boothid=p_booth AND Checkvote=1;
+  RETURN (v_voted/v_total)*100;
+EXCEPTION
+  WHEN ZERO_DIVIDE THEN RETURN 0;
+END;
+/
