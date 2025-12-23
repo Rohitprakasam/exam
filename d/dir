@@ -1,1 +1,7 @@
-use this root directory
+[1]
+Create the following tables with given attributes having appropriate data type and specify the necessary primary and foreign key constraints:
+Customer (Custid, Custname, Age, phone)
+Loan (Loanid, Amount, Custid, EMI)
+#1 
+
+[2]
