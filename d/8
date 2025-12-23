@@ -1,0 +1,87 @@
+✅ Create Tables with Proper Mapping & Constraints
+Student Details Table
+
+
+CREATE TABLE stu_details (
+    reg_no NUMBER PRIMARY KEY,
+    stu_name VARCHAR2(30),
+    DOB DATE,
+    address VARCHAR2(50),
+    city VARCHAR2(30)
+);
+
+Mark Details Table
+
+CREATE TABLE mark_details (
+    reg_no NUMBER PRIMARY KEY,
+    mark1 NUMBER,
+    mark2 NUMBER,
+    mark3 NUMBER,
+    total NUMBER,
+    CONSTRAINT fk_mark_stu FOREIGN KEY (reg_no)
+    REFERENCES stu_details(reg_no)
+);
+
+
+a) Alter mark_details to add average column (datatype: LONG)
+
+ALTER TABLE mark_details
+ADD average LONG;
+
+
+b) Display the months between DOB and till date
+
+SELECT reg_no,
+       stu_name,
+       MONTHS_BETWEEN(SYSDATE, DOB) AS Months_Difference
+FROM stu_details;
+
+
+c) Drop the column address from stu_details
+
+ALTER TABLE stu_details
+DROP COLUMN address;
+
+
+
+d) PL/SQL Program to find Sum & Average Marks of all students using Procedure
+Procedure Definition
+
+
+SET SERVEROUTPUT ON;
+
+CREATE OR REPLACE PROCEDURE calc_sum_avg IS
+    CURSOR c_marks IS
+        SELECT reg_no, mark1, mark2, mark3
+        FROM mark_details;
+
+    v_total NUMBER;
+    v_avg   NUMBER;
+BEGIN
+    FOR rec IN c_marks LOOP
+        v_total := rec.mark1 + rec.mark2 + rec.mark3;
+        v_avg   := v_total / 3;
+
+        DBMS_OUTPUT.PUT_LINE('Reg No   : ' || rec.reg_no);
+        DBMS_OUTPUT.PUT_LINE('Total    : ' || v_total);
+        DBMS_OUTPUT.PUT_LINE('Average  : ' || v_avg);
+        DBMS_OUTPUT.PUT_LINE('------------------------');
+    END LOOP;
+END;
+/
+
+
+▶ Procedure Call
+EXEC calc_sum_avg;
+
+
+
+🧪 Sample Data (Optional – For Testing)
+
+INSERT INTO stu_details VALUES (101, 'ARUN', DATE '2002-05-12', 'Chennai', 'Chennai');
+INSERT INTO stu_details VALUES (102, 'KUMAR', DATE '2001-03-20', 'Madurai', 'Madurai');
+
+INSERT INTO mark_details VALUES (101, 80, 85, 90, NULL);
+INSERT INTO mark_details VALUES (102, 75, 88, 92, NULL);
+
+COMMIT;
