@@ -1,0 +1,92 @@
+4️⃣ Create Tables with Appropriate Data Types and Constraints
+
+Customer Table
+CREATE TABLE Customer (
+    Custid NUMBER PRIMARY KEY,
+    Custname VARCHAR2(30),
+    Addr VARCHAR2(50),
+    Phno VARCHAR2(15),
+    Panno VARCHAR2(15)
+);
+
+Loan Table
+CREATE TABLE Loan (
+    Loanid NUMBER PRIMARY KEY,
+    Amount NUMBER,
+    Interest NUMBER,
+    Custid NUMBER,
+    CONSTRAINT fk_loan_cust FOREIGN KEY (Custid)
+    REFERENCES Customer(Custid)
+);
+
+Account Table
+CREATE TABLE Account (
+    Acctno NUMBER PRIMARY KEY,
+    Accbal NUMBER,
+    Custid NUMBER,
+    CONSTRAINT fk_acc_cust FOREIGN KEY (Custid)
+    REFERENCES Customer(Custid)
+);
+
+a) Display the Account balance amount of customer “ARUN”
+
+SELECT a.Accbal
+FROM Account a
+JOIN Customer c
+ON a.Custid = c.Custid
+WHERE c.Custname = 'ARUN';
+
+b) Update the interest with 1% when
+Accbal of the Custid > 50% of Loan Amount
+
+UPDATE Loan l
+SET l.Interest = l.Interest + 1
+WHERE l.Custid IN (
+    SELECT a.Custid
+    FROM Account a
+    WHERE a.Accbal > 0.5 * (
+        SELECT Amount
+        FROM Loan
+        WHERE Custid = a.Custid
+    )
+);
+
+c) Create a View with Accbal and Loan Amount of all Customers
+
+CREATE VIEW Cust_Acc_Loan_View AS
+SELECT c.Custid,
+       a.Accbal,
+       l. Amount AS Loan_Amount
+FROM Customer c
+JOIN Account a ON c.Custid = a.Custid
+JOIN Loan l ON c.Custid = l.Custid;
+
+
+▶ View Usage
+SELECT * FROM Cust_Acc_Loan_View;
+
+d) Create a Trigger to check Minimum Balance in Account
+(Assume minimum balance = ₹1000)
+
+CREATE OR REPLACE TRIGGER check_min_balance
+BEFORE INSERT OR UPDATE ON Account
+FOR EACH ROW
+BEGIN
+    IF :NEW.Accbal < 1000 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Minimum balance of 1000 required');
+    END IF;
+END;
+/
+
+
+🧪 Sample Data (Optional – For Testing)
+INSERT INTO Customer VALUES (1, 'ARUN', 'Chennai', '9876543210', 'ABCDE1234F');
+INSERT INTO Customer VALUES (2, 'KUMAR', 'Madurai', '9123456789', 'PQRSX5678Z');
+
+INSERT INTO Loan VALUES (101, 100000, 8, 1);
+INSERT INTO Loan VALUES (102, 80000, 7, 2);
+
+INSERT INTO Account VALUES (201, 60000, 1);
+INSERT INTO Account VALUES (202, 30000, 2);
+
+COMMIT;
