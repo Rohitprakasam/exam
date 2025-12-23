@@ -1,0 +1,28 @@
+14. STUDENT DATABASE
+a) Drop column
+Copy code
+Sql
+ALTER TABLE dept_details DROP COLUMN location;
+
+b) Display dept
+Copy code
+Sql
+SELECT dept_no, dept_name FROM dept_details;
+
+c) Drop table
+Copy code
+Sql
+DROP TABLE dept_details;
+
+d) Trigger
+Copy code
+Sql
+CREATE OR REPLACE TRIGGER verify_marks
+BEFORE INSERT ON Assessment
+FOR EACH ROW
+BEGIN
+  IF :NEW.total > 300 THEN
+    RAISE_APPLICATION_ERROR(-20001,'Invalid marks');
+  END IF;
+END;
+/
