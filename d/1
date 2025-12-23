@@ -1,0 +1,68 @@
+1️⃣ Create Tables with Constraints
+
+CREATE TABLE Customer (
+    Custid NUMBER PRIMARY KEY,
+    Custname VARCHAR2(30),
+    Age NUMBER,
+    Phone VARCHAR2(15)
+);
+
+CREATE TABLE Loan (
+    Loanid NUMBER PRIMARY KEY,
+    Amount NUMBER,
+    Custid NUMBER,
+    EMI NUMBER,
+    CONSTRAINT fk_cust FOREIGN KEY (Custid)
+    REFERENCES Customer(Custid)
+);
+
+
+a) List the name of the customers who have taken loan for more than Rs. 50,000
+
+SELECT DISTINCT c.Custname
+FROM Customer c
+JOIN Loan l ON c.Custid = l.Custid
+WHERE l.Amount > 50000;
+
+
+b) List the Customer id of those who have no loan
+
+SELECT Custid
+FROM Customer
+WHERE Custid NOT IN (
+    SELECT Custid FROM Loan
+);
+
+c) List the total count of loan availed
+
+SELECT COUNT(*) AS Total_Loans
+FROM Loan;
+
+d) Create a Procedure to print Amount and Custid for a given Loanid
+(With Exception Handling – PL/SQL)
+
+CREATE OR REPLACE PROCEDURE get_loan_details (
+    p_loanid IN Loan.Loanid%TYPE
+) IS
+    v_amount Loan.Amount%TYPE;
+    v_custid Loan.Custid%TYPE;
+BEGIN
+    SELECT Amount, Custid
+    INTO v_amount, v_custid
+    FROM Loan
+    WHERE Loanid = p_loanid;
+
+    DBMS_OUTPUT.PUT_LINE('Amount: ' || v_amount);
+    DBMS_OUTPUT.PUT_LINE('Customer ID: ' || v_custid);
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No loan found with given Loan ID');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred');
+END;
+/
+
+
+▶ Procedure Call Example
+EXEC get_loan_details(101);
