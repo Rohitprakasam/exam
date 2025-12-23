@@ -1,0 +1,56 @@
+EMPLOYEE & DEPARTMENT
+
+Tables
+Copy code
+Sql
+CREATE TABLE Department (
+  Deptno NUMBER PRIMARY KEY,
+  Dname VARCHAR2(20),
+  Dloc VARCHAR2(20)
+);
+
+CREATE TABLE Employee (
+  Empno NUMBER PRIMARY KEY,
+  Ename VARCHAR2(30),
+  Job VARCHAR2(20),
+  MgrId NUMBER,
+  DoB DATE,
+  DoJ DATE,
+  Sal NUMBER,
+  Comm NUMBER,
+  Deptno NUMBER REFERENCES Department(Deptno)
+);
+
+a) Experience ordered by salary
+Copy code
+Sql
+SELECT Empno, Ename, Sal,
+FLOOR(MONTHS_BETWEEN(SYSDATE, DoJ)/12) Experience
+FROM Employee
+ORDER BY Sal DESC;
+
+b) Marketing employees
+Copy code
+Sql
+SELECT Ename FROM Employee e JOIN Department d
+ON e.Deptno=d.Deptno
+WHERE d.Dname='Marketing';
+
+c) Born this month
+Copy code
+Sql
+SELECT Ename FROM Employee
+WHERE TO_CHAR(DoB,'MM')=TO_CHAR(SYSDATE,'MM');
+
+d) Function
+Copy code
+Sql
+CREATE OR REPLACE FUNCTION emp_details(p_empno NUMBER)
+RETURN VARCHAR2 IS v_name VARCHAR2(30);
+BEGIN
+  SELECT Ename INTO v_name FROM Employee WHERE Empno=p_empno;
+  RETURN v_name;
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN RETURN 'Not Found';
+END;
+/
