@@ -1,0 +1,71 @@
+✅ Create Tables with Primary & Foreign Key Constraints
+
+Product Table
+
+CREATE TABLE Product (
+    Prodid NUMBER PRIMARY KEY,
+    Prodesc VARCHAR2(50),
+    Price NUMBER,
+    Stock NUMBER
+);
+
+Sales Table
+
+CREATE TABLE Sales (
+    Salesid NUMBER PRIMARY KEY,
+    Prodid NUMBER,
+    Qty NUMBER,
+    CONSTRAINT fk_sales_prod FOREIGN KEY (Prodid)
+    REFERENCES Product(Prodid)
+);
+
+a) Add a column Reorder in Product table
+
+(Set value = 50 for all products)
+ALTER TABLE Product
+ADD Reorder NUMBER DEFAULT 50;
+
+
+✔ This automatically assigns 50 to existing and new rows.
+
+b) Create a Login Form to Validate a User
+(Using Oracle PL/SQL – Exam Standard)
+
+Step 1️⃣ Create Login Table
+
+CREATE TABLE Login (
+    Username VARCHAR2(20) PRIMARY KEY,
+    Password VARCHAR2(20)
+);
+
+Step 2️⃣ Insert Sample User
+
+INSERT INTO Login VALUES ('admin', 'admin123');
+COMMIT;
+
+Step 3️⃣ PL/SQL Program for Login Validation
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    v_username Login.Username%TYPE := '&Username';
+    v_password Login.Password%TYPE := '&Password';
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Login
+    WHERE Username = v_username
+    AND Password = v_password;
+
+    IF v_count = 1 THEN
+        DBMS_OUTPUT.PUT_LINE('Login Successful');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Invalid Username or Password');
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred during login');
+END;
+/
