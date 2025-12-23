@@ -1,0 +1,51 @@
+16. SAILOR DATABASE
+Tables
+Copy code
+Sql
+CREATE TABLE Sailor(sid NUMBER PRIMARY KEY, sname VARCHAR2(30), rating NUMBER, age NUMBER);
+CREATE TABLE Boats(bid NUMBER PRIMARY KEY, bname VARCHAR2(20), colour VARCHAR2(10));
+CREATE TABLE Reserves(sid NUMBER REFERENCES Sailor(sid), bid NUMBER REFERENCES Boats(bid), day DATE);
+
+
+a) Rating desc
+Copy code
+Sql
+SELECT * FROM Sailor ORDER BY rating DESC;
+
+
+b) Youngest & voter
+Copy code
+Sql
+SELECT * FROM Sailor
+WHERE age=(SELECT MIN(age) FROM Sailor GROUP BY rating)
+AND age>=18;
+
+
+c) Red & Green
+Copy code
+Sql
+SELECT sid FROM Reserves r JOIN Boats b
+ON r.bid=b.bid
+WHERE colour='RED'
+INTERSECT
+SELECT sid FROM Reserves r JOIN Boats b
+ON r.bid=b.bid
+WHERE colour='GREEN';
+
+
+d) Synonym
+Copy code
+Sql
+CREATE SYNONYM sailor_syn FOR Sailor;
+
+
+e) Function
+Copy code
+Sql
+CREATE OR REPLACE FUNCTION sailor_name(p_sid NUMBER)
+RETURN VARCHAR2 IS v_name VARCHAR2(30);
+BEGIN
+  SELECT sname INTO v_name FROM Sailor WHERE sid=p_sid;
+  RETURN v_name;
+END;
+/
