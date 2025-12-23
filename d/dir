@@ -34,3 +34,12 @@ HomeLoan (HLoanid, Amount, Custid)
 VehicleLoan (VLoanid, Amount, Custid) 
 #5
 
+[6]
+Create the following tables with the given attributes having appropriate data type and specify the 
+necessary primary and foreign key constraints: 
+Product (Prodid, Prodesc, Price, Stock) 
+Sales (Salesid, Prodid, qty) 
+a) Add a column reorder in the Product table having a value of 50 for all products. 
+b) Create a Login form to validate a user. 
+#6
+
