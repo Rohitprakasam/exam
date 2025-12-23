@@ -64,5 +64,9 @@ END;
 /
 
 
+
+Step 1️⃣ Enable Output (Very Important)
+SET SERVEROUTPUT ON;
+
 ▶ Procedure Call Example
 EXEC get_loan_details(101);
