@@ -1,0 +1,79 @@
+✅ Create Table with Appropriate Data Types & Primary Key
+Marks Table
+
+CREATE TABLE Marks (
+    Regno NUMBER PRIMARY KEY,
+    Name VARCHAR2(30),
+    Dept VARCHAR2(20),
+    Subj1 NUMBER,
+    Subj2 NUMBER,
+    Subj3 NUMBER
+);
+
+a) Add Total column and update it with sum of 3 subjects
+
+Add Column
+
+ALTER TABLE Marks
+ADD Total NUMBER;
+
+Update Total Marks
+
+UPDATE Marks
+SET Total = Subj1 + Subj2 + Subj3;
+
+b) Find the second maximum Total in the table
+
+SELECT MAX(Total) AS Second_Max_Total
+FROM Marks
+WHERE Total < (SELECT MAX(Total) FROM Marks);
+
+c) Display the name of the student with maximum Total
+
+SELECT Name
+FROM Marks
+WHERE Total = (SELECT MAX(Total) FROM Marks);
+
+d) PL/SQL Program to display Report Sheet using Cursor
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    CURSOR c_marks IS
+        SELECT Regno, Name, Dept, Subj1, Subj2, Subj3, Total
+        FROM Marks;
+
+    v_rec c_marks%ROWTYPE;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('REGNO  NAME    DEPT   S1  S2  S3  TOTAL');
+    DBMS_OUTPUT.PUT_LINE('-------------------------------------');
+
+    OPEN c_marks;
+    LOOP
+        FETCH c_marks INTO v_rec;
+        EXIT WHEN c_marks%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(
+            v_rec.Regno || '  ' ||
+            v_rec.Name || '  ' ||
+            v_rec.Dept || '  ' ||
+            v_rec.Subj1 || '  ' ||
+            v_rec.Subj2 || '  ' ||
+            v_rec.Subj3 || '  ' ||
+            v_rec.Total
+        );
+    END LOOP;
+    CLOSE c_marks;
+END;
+/
+
+
+🧪 Sample Data (Optional – For Testing)
+INSERT INTO Marks VALUES (101, 'ARUN', 'CSE', 80, 85, 90, NULL);
+INSERT INTO Marks VALUES (102, 'KUMAR', 'IT', 75, 88, 92, NULL);
+INSERT INTO Marks VALUES (103, 'SITA', 'ECE', 90, 91, 89, NULL);
+
+UPDATE Marks
+SET Total = Subj1 + Subj2 + Subj3;
+
+COMMIT;
