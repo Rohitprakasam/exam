@@ -1,54 +1,113 @@
-10. VOTER & BOOTH
-Tables
-Copy code
-Sql
+Create Tables with Primary & Foreign Key Constraints
+Booth Table
+
 CREATE TABLE Booth (
-  Boothid NUMBER PRIMARY KEY,
-  Location VARCHAR2(30),
-  BIncharge VARCHAR2(30)
+    Boothid NUMBER PRIMARY KEY,
+    Location VARCHAR2(30),
+    BIncharge VARCHAR2(30)
 );
+
+Voter Table
+
 
 CREATE TABLE Voter (
-  VoterId NUMBER PRIMARY KEY,
-  Votername VARCHAR2(30),
-  Gender CHAR(1),
-  Boothid NUMBER REFERENCES Booth(Boothid),
-  Checkvote NUMBER
+    VoterId NUMBER PRIMARY KEY,
+    Votername VARCHAR2(30),
+    Gender CHAR(1),
+    Boothid NUMBER,
+    Checkvote NUMBER(1),
+    CONSTRAINT fk_voter_booth FOREIGN KEY (Boothid)
+    REFERENCES Booth(Boothid),
+    CONSTRAINT chk_vote CHECK (Checkvote IN (0,1))
 );
 
-a) Counts
-Copy code
-Sql
-SELECT Boothid, COUNT(*) FROM Voter GROUP BY Boothid;
 
-SELECT COUNT(*) FROM Voter
-WHERE Gender='M' AND Checkvote=1;
+a)
+(i) List the count of voters in each Booth
 
-b) Total voted
-Copy code
-Sql
-SELECT COUNT(*) FROM Voter WHERE Checkvote=1;
 
-c) Booth details
-Copy code
-Sql
-SELECT b.Boothid, Location, COUNT(v.VoterId)
-FROM Booth b JOIN Voter v
-ON b.Boothid=v.Boothid
-WHERE Checkvote=1
-GROUP BY b.Boothid, Location;
+SELECT Boothid,
+       COUNT(VoterId) AS Total_Voters
+FROM Voter
+GROUP BY Boothid;
 
-d) Function
-Copy code
-Sql
-CREATE OR REPLACE FUNCTION poll_percent(p_booth NUMBER)
-RETURN NUMBER IS v_total NUMBER; v_voted NUMBER;
+(ii) List the count of Male voters who voted
+
+
+SELECT COUNT(*) AS Male_Voters_Voted
+FROM Voter
+WHERE Gender = 'M'
+AND Checkvote = 1;
+
+b) Display the overall count of voters who voted
+
+
+SELECT COUNT(*) AS Total_Voted
+FROM Voter
+WHERE Checkvote = 1;
+
+
+c) Display the Boothid, Location and count of voters voted
+
+
+SELECT b.Boothid,
+       b.Location,
+       COUNT(v.VoterId) AS Voted_Count
+FROM Booth b
+JOIN Voter v
+ON b.Boothid = v.Boothid
+WHERE v.Checkvote = 1
+GROUP BY b.Boothid, b.Location;
+
+
+
+d) PL/SQL Function to return percentage of poll in a booth
+(With Exception Handling)
+
+
+CREATE OR REPLACE FUNCTION poll_percentage (
+    p_boothid IN Voter.Boothid%TYPE
+) RETURN NUMBER IS
+    v_total NUMBER;
+    v_voted NUMBER;
+    v_percent NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO v_total FROM Voter WHERE Boothid=p_booth;
-  SELECT COUNT(*) INTO v_voted FROM Voter
-  WHERE Boothid=p_booth AND Checkvote=1;
-  RETURN (v_voted/v_total)*100;
+    SELECT COUNT(*) INTO v_total
+    FROM Voter
+    WHERE Boothid = p_boothid;
+
+    SELECT COUNT(*) INTO v_voted
+    FROM Voter
+    WHERE Boothid = p_boothid
+    AND Checkvote = 1;
+
+    IF v_total = 0 THEN
+        RETURN 0;
+    END IF;
+
+    v_percent := (v_voted / v_total) * 100;
+    RETURN v_percent;
+
 EXCEPTION
-  WHEN ZERO_DIVIDE THEN RETURN 0;
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        RETURN -1;
 END;
 /
+
+
+▶ Function Call
+SELECT poll_percentage(101) FROM dual;
+
+
+🧪 Sample Data (Optional – For Testing)
+INSERT INTO Booth VALUES (101, 'Chennai', 'Ravi');
+INSERT INTO Booth VALUES (102, 'Madurai', 'Suresh');
+
+INSERT INTO Voter VALUES (1, 'ARUN', 'M', 101, 1);
+INSERT INTO Voter VALUES (2, 'SITA', 'F', 101, 1);
+INSERT INTO Voter VALUES (3, 'KUMAR', 'M', 101, 0);
+INSERT INTO Voter VALUES (4, 'RAJ', 'M', 102, 1);
+
+COMMIT;
