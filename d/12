@@ -1,36 +1,81 @@
-12. BOOK DATABASE
-Copy code
-Sql
-CREATE TABLE book (
-  book_name VARCHAR2(30),
-  author_name VARCHAR2(30),
-  price NUMBER,
-  quantity NUMBER
+✅ Create Book Table
+
+
+CREATE TABLE Book (
+    book_name   VARCHAR2(50),
+    author_name VARCHAR2(40),
+    price       NUMBER,
+    quantity    NUMBER
 );
-a) Double quantity
-Copy code
-Sql
-UPDATE book SET quantity=quantity*2;
 
-b) Costly books
-Copy code
-Sql
-SELECT book_name FROM book
-WHERE price > (SELECT price FROM book
-WHERE book_name='Database for Dummies');
+a) Update the quantity by double in the table Book
 
-c) Author starts with A
-Copy code
-Sql
+
+UPDATE Book
+SET quantity = quantity * 2;
+
+
+b) List all book_name whose price is greater than the book
+
+named "Database for Dummies"
+
+
+SELECT book_name
+FROM Book
+WHERE price >
+(
+    SELECT price
+    FROM Book
+    WHERE book_name = 'Database for Dummies'
+);
+
+
+
+c) Retrieve the author_name, book_name, and price
+
+whose author name starts with letter ‘a’
+
+
 SELECT author_name, book_name, price
-FROM book WHERE author_name LIKE 'A%';
+FROM Book
+WHERE LOWER(author_name) LIKE 'a%';
 
-d) Procedure
-Copy code
-Sql
-CREATE OR REPLACE PROCEDURE count_books(p_author VARCHAR2) IS v_cnt NUMBER;
+d) PL/SQL Procedure to find the total number of books of the same author
+
+
+SET SERVEROUTPUT ON;
+
+CREATE OR REPLACE PROCEDURE total_books_by_author (
+    p_author IN Book.author_name%TYPE
+) IS
+    v_count NUMBER;
 BEGIN
-  SELECT COUNT(*) INTO v_cnt FROM book WHERE author_name=p_author;
-  DBMS_OUTPUT.PUT_LINE(v_cnt);
+    SELECT COUNT(*)
+    INTO v_count
+    FROM Book
+    WHERE author_name = p_author;
+
+    DBMS_OUTPUT.PUT_LINE(
+        'Total books written by ' || p_author || ' : ' || v_count
+    );
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No books found for given author');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred');
 END;
 /
+
+
+▶ Procedure Call Example
+EXEC total_books_by_author('Arun');
+
+
+🧪 Sample Data (Optional – for Testing)
+INSERT INTO Book VALUES ('DBMS Concepts', 'Arun', 550, 10);
+INSERT INTO Book VALUES ('Database for Dummies', 'Kumar', 450, 5);
+INSERT INTO Book VALUES ('Advanced SQL', 'Anitha', 650, 8);
+INSERT INTO Book VALUES ('PLSQL Basics', 'Arun', 500, 6);
+
+COMMIT;
