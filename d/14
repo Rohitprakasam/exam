@@ -1,28 +1,71 @@
-14. STUDENT DATABASE
-a) Drop column
-Copy code
-Sql
-ALTER TABLE dept_details DROP COLUMN location;
+Create Student Database Tables
 
-b) Display dept
-Copy code
-Sql
-SELECT dept_no, dept_name FROM dept_details;
+Assessment Table
 
-c) Drop table
-Copy code
-Sql
-DROP TABLE dept_details;
+CREATE TABLE Assessment (
+    reg_no NUMBER PRIMARY KEY,
+    name VARCHAR2(30),
+    mark1 NUMBER,
+    mark2 NUMBER,
+    mark3 NUMBER,
+    total NUMBER
+);
 
-d) Trigger
-Copy code
-Sql
-CREATE OR REPLACE TRIGGER verify_marks
+
+Dept_Details Table
+
+
+CREATE TABLE Dept_Details (
+    dept_no NUMBER PRIMARY KEY,
+    dept_name VARCHAR2(30),
+    location VARCHAR2(30)
+);
+
+
+a) Using ALTER command drop the column location from dept_details
+
+
+ALTER TABLE Dept_Details
+DROP COLUMN location;
+
+b) Display all dept_name along with dept_no
+
+
+SELECT dept_no, dept_name
+FROM Dept_Details;
+
+c) Drop the table dept_details
+
+
+DROP TABLE Dept_Details;
+
+d) PL/SQL Trigger to verify data before insertion on Assessment table
+Condition (Exam-standard):
+Marks should be between 0 and 100
+Automatically calculate total
+
+
+
+CREATE OR REPLACE TRIGGER trg_verify_assessment
 BEFORE INSERT ON Assessment
 FOR EACH ROW
 BEGIN
-  IF :NEW.total > 300 THEN
-    RAISE_APPLICATION_ERROR(-20001,'Invalid marks');
-  END IF;
+    IF :NEW.mark1 < 0 OR :NEW.mark1 > 100 OR
+       :NEW.mark2 < 0 OR :NEW.mark2 > 100 OR
+       :NEW.mark3 < 0 OR :NEW.mark3 > 100 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Marks must be between 0 and 100');
+    END IF;
+
+    :NEW.total := :NEW.mark1 + :NEW.mark2 + :NEW.mark3;
 END;
 /
+
+
+
+🧪 Sample Insert (to test trigger)
+INSERT INTO Assessment (reg_no, name, mark1, mark2, mark3)
+VALUES (101, 'ARUN', 80, 85, 90);
+
+
+✔ total will be calculated automatically
+❌ Invalid marks will be rejected
