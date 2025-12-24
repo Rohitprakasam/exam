@@ -1,34 +1,122 @@
-15. BUS RESERVATION
-a) DOB constraint
-Copy code
-Sql
-ALTER TABLE Passenger
-ADD CONSTRAINT chk_dob CHECK (DOB > DATE '2000-01-01');
+Create Tables with Appropriate Constraints
+BUS Table
+
+CREATE TABLE BUS (
+    RouteNo NUMBER PRIMARY KEY,
+    Source VARCHAR2(30),
+    Destination VARCHAR2(30)
+);
+
+PASSENGER Table
+
+👉 Constraint: DOB should be after year 2000
 
 
-b) Mumbai → Chennai
-Copy code
-Sql
-SELECT Pname FROM Passenger p
-JOIN Book_Ticket b ON p.PID=b.PID
-JOIN Bus bu ON b.Routeno=bu.Routeno
-WHERE Source='Mumbai' AND Destination='Chennai'
-AND Journey_date='02-FEB-2019';
-
-c) Traveled >3 times
-Copy code
-Sql
-SELECT PID FROM Book_Ticket
-GROUP BY PID, Routeno
-HAVING COUNT(*)>3;
+CREATE TABLE PASSENGER (
+    PID NUMBER PRIMARY KEY,
+    PName VARCHAR2(30),
+    DOB DATE CHECK (DOB > DATE '2000-01-01'),
+    Gender CHAR(1)
+);
 
 
+BOOK_TICKET Table
 
-d) View
-Copy code
-Sql
-CREATE VIEW route_view AS
-SELECT Routeno, Source, Destination, Journey_date
-FROM Bus b JOIN Book_Ticket t
-ON b.Routeno=t.Routeno
-WHERE Source='Chennai' AND Destination='Delhi';
+
+CREATE TABLE BOOK_TICKET (
+    PID NUMBER,
+    RouteNo NUMBER,
+    Journey_Date DATE,
+    Seat_No NUMBER,
+    CONSTRAINT fk_bt_pid FOREIGN KEY (PID)
+        REFERENCES PASSENGER(PID),
+    CONSTRAINT fk_bt_route FOREIGN KEY (RouteNo)
+        REFERENCES BUS(RouteNo),
+    PRIMARY KEY (PID, RouteNo, Journey_Date)
+);
+
+
+a) Constraint included
+
+✔ DOB check constraint ensures passenger is born after 2000
+(Already applied in PASSENGER table)
+
+b) Display passengers who booked journey
+from Mumbai to Chennai on 02-Feb-2019
+
+SELECT p.PName
+FROM PASSENGER p
+JOIN BOOK_TICKET bt ON p.PID = bt.PID
+JOIN BUS b ON bt.RouteNo = b.RouteNo
+WHERE b.Source = 'Mumbai'
+AND b.Destination = 'Chennai'
+AND bt.Journey_Date = DATE '2019-02-02';
+
+c) List details of passengers who have traveled
+more than three times on the same route
+
+SELECT p.PID, p.PName, bt.RouteNo, COUNT(*) AS Travel_Count
+FROM PASSENGER p
+JOIN BOOK_TICKET bt ON p.PID = bt.PID
+GROUP BY p.PID, p.PName, bt.RouteNo
+HAVING COUNT(*) > 3;
+
+
+d) Create a View for buses moving from Chennai to Delhi
+
+CREATE VIEW Chennai_Delhi_View AS
+SELECT b.RouteNo,
+       b.Source,
+       b.Destination,
+       bt.Journey_Date
+FROM BUS b
+JOIN BOOK_TICKET bt ON b.RouteNo = bt.RouteNo
+WHERE b.Source = 'Chennai'
+AND b.Destination = 'Delhi';
+
+
+▶ View Usage
+SELECT * FROM Chennai_Delhi_View;
+
+
+e) PL/SQL Procedure to display tickets on a given date
+With Exception:
+❌ "No ticket booked on specified date"
+
+
+SET SERVEROUTPUT ON;
+
+CREATE OR REPLACE PROCEDURE ticket_on_date (
+    p_date IN DATE
+) IS
+    v_count NUMBER := 0;
+BEGIN
+    FOR rec IN (
+        SELECT p.PName, b.Source, b.Destination, bt.Journey_Date
+        FROM PASSENGER p
+        JOIN BOOK_TICKET bt ON p.PID = bt.PID
+        JOIN BUS b ON bt.RouteNo = b.RouteNo
+        WHERE bt.Journey_Date = p_date
+    ) LOOP
+        v_count := v_count + 1;
+        DBMS_OUTPUT.PUT_LINE(
+            rec.PName || ' : ' ||
+            rec.Source || ' → ' ||
+            rec.Destination || ' on ' ||
+            rec.Journey_Date
+        );
+    END LOOP;
+
+    IF v_count = 0 THEN
+        RAISE NO_DATA_FOUND;
+    END IF;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No ticket booked on specified date');
+END;
+/
+
+
+▶ Procedure Call
+EXEC ticket_on_date(DATE '2019-02-02');
