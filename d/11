@@ -1,36 +1,131 @@
-11. INSURANCE DATABASE
-Tables
-Copy code
-Sql
-CREATE TABLE PERSON(driver_id NUMBER PRIMARY KEY, name VARCHAR2(30), address VARCHAR2(50));
-CREATE TABLE CAR(regno VARCHAR2(10) PRIMARY KEY, model VARCHAR2(20), year NUMBER);
-CREATE TABLE ACCIDENT(report_number NUMBER PRIMARY KEY, accd_date DATE, location VARCHAR2(30));
-CREATE TABLE OWNS(driver_id NUMBER REFERENCES PERSON(driver_id), regno VARCHAR2(10) REFERENCES CAR(regno));
-CREATE TABLE PARTICIPATED(driver_id NUMBER, regno VARCHAR2(10), report_number NUMBER, damage_amount NUMBER);
+(a) Create Tables with Primary & Foreign Keys
++ Insert at least 5 tuples for each relation
 
-b) Update damage
-Copy code
-Sql
+
+PERSON
+
+
+CREATE TABLE PERSON (
+    driver_id NUMBER PRIMARY KEY,
+    name VARCHAR2(30),
+    address VARCHAR2(50)
+);
+
+
+CAR
+
+
+CREATE TABLE CAR (
+    regno VARCHAR2(10) PRIMARY KEY,
+    model VARCHAR2(20),
+    year NUMBER
+);
+
+
+ACCIDENT
+
+
+CREATE TABLE ACCIDENT (
+    report_number NUMBER PRIMARY KEY,
+    accd_date DATE,
+    location VARCHAR2(30)
+);
+
+
+OWNS
+
+
+CREATE TABLE OWNS (
+    driver_id NUMBER,
+    regno VARCHAR2(10),
+    PRIMARY KEY (driver_id, regno),
+    FOREIGN KEY (driver_id) REFERENCES PERSON(driver_id),
+    FOREIGN KEY (regno) REFERENCES CAR(regno)
+);
+
+
+PARTICIPATED
+
+
+CREATE TABLE PARTICIPATED (
+    driver_id NUMBER,
+    regno VARCHAR2(10),
+    report_number NUMBER,
+    damage_amount NUMBER,
+    PRIMARY KEY (driver_id, regno, report_number),
+    FOREIGN KEY (driver_id) REFERENCES PERSON(driver_id),
+    FOREIGN KEY (regno) REFERENCES CAR(regno),
+    FOREIGN KEY (report_number) REFERENCES ACCIDENT(report_number)
+);
+
+
+🔹 Insert Sample Data (5 tuples each)
+
+
+INSERT INTO PERSON VALUES (1,'ARUN','Chennai');
+INSERT INTO PERSON VALUES (2,'KUMAR','Madurai');
+INSERT INTO PERSON VALUES (3,'SITA','Trichy');
+INSERT INTO PERSON VALUES (4,'RAJ','Salem');
+INSERT INTO PERSON VALUES (5,'ANU','Coimbatore');
+
+INSERT INTO CAR VALUES ('TN01A1','Wagon R',2017);
+INSERT INTO CAR VALUES ('TN02B2','Swift',2018);
+INSERT INTO CAR VALUES ('TN03C3','Wagon R',2019);
+INSERT INTO CAR VALUES ('TN04D4','i20',2016);
+INSERT INTO CAR VALUES ('TN05E5','Baleno',2018);
+
+INSERT INTO ACCIDENT VALUES (1021, DATE '2018-02-10','Chennai');
+INSERT INTO ACCIDENT VALUES (1022, DATE '2018-07-15','Madurai');
+INSERT INTO ACCIDENT VALUES (1023, DATE '2019-01-20','Salem');
+INSERT INTO ACCIDENT VALUES (1024, DATE '2017-12-05','Trichy');
+INSERT INTO ACCIDENT VALUES (1025, DATE '2018-11-18','Coimbatore');
+
+INSERT INTO OWNS VALUES (1,'TN01A1');
+INSERT INTO OWNS VALUES (2,'TN02B2');
+INSERT INTO OWNS VALUES (3,'TN03C3');
+INSERT INTO OWNS VALUES (4,'TN04D4');
+INSERT INTO OWNS VALUES (5,'TN05E5');
+
+INSERT INTO PARTICIPATED VALUES (1,'TN01A1',1021,15000);
+INSERT INTO PARTICIPATED VALUES (2,'TN02B2',1022,10000);
+INSERT INTO PARTICIPATED VALUES (3,'TN03C3',1025,20000);
+INSERT INTO PARTICIPATED VALUES (4,'TN04D4',1024,12000);
+INSERT INTO PARTICIPATED VALUES (5,'TN05E5',1023,18000);
+
+COMMIT;
+
+
+✅ (b) Update damage amount for regno in accident report number 1025
+
+
 UPDATE PARTICIPATED
-SET damage_amount=5000
-WHERE regno='TN10' AND report_number=1025;
+SET damage_amount = 25000
+WHERE regno = 'TN03C3'
+AND report_number = 1025;
 
-c) Add accident
-Copy code
-Sql
-INSERT INTO ACCIDENT VALUES (2001,SYSDATE,'Chennai');
 
-d) People in accidents 2018
-Copy code
-Sql
-SELECT COUNT(DISTINCT driver_id)
-FROM PARTICIPATED p JOIN ACCIDENT a
-ON p.report_number=a.report_number
-WHERE TO_CHAR(accd_date,'YYYY')='2018';
+✅ (c) Add a new accident to the database
 
-e) Wagon R accidents
-Copy code
-Sql
-SELECT COUNT(*) FROM PARTICIPATED p JOIN CAR c
-ON p.regno=c.regno
-WHERE model='Wagon R';
+
+INSERT INTO ACCIDENT
+VALUES (1026, DATE '2018-09-30', 'Erode');
+COMMIT;
+
+
+✅ (d) Total number of people who owned cars involved in accidents in 2018
+
+
+SELECT COUNT(DISTINCT p.driver_id) AS Total_People
+FROM PERSON p
+JOIN PARTICIPATED pa ON p.driver_id = pa.driver_id
+JOIN ACCIDENT a ON pa.report_number = a.report_number
+WHERE EXTRACT(YEAR FROM a.accd_date) = 2018;
+
+
+✅ (e) Number of accidents involving cars of model ‘Wagon R’
+
+
+SELECT COUNT(DISTINCT pa.report_number) AS WagonR_Accidents
+FROM PARTICIPATED pa
+JOIN CAR c ON pa.regno = c.regno
+WHERE c.model = 'Wagon R';
