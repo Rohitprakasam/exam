@@ -1,51 +1,71 @@
-16. SAILOR DATABASE
-Tables
-Copy code
-Sql
-CREATE TABLE Sailor(sid NUMBER PRIMARY KEY, sname VARCHAR2(30), rating NUMBER, age NUMBER);
-CREATE TABLE Boats(bid NUMBER PRIMARY KEY, bname VARCHAR2(20), colour VARCHAR2(10));
-CREATE TABLE Reserves(sid NUMBER REFERENCES Sailor(sid), bid NUMBER REFERENCES Boats(bid), day DATE);
+
+a) List the sailors in descending order of their rating
 
 
-a) Rating desc
-Copy code
-Sql
-SELECT * FROM Sailor ORDER BY rating DESC;
+SELECT sid, sname, rating, age
+FROM SAILOR
+ORDER BY rating DESC;
 
 
-b) Youngest & voter
-Copy code
-Sql
-SELECT * FROM Sailor
-WHERE age=(SELECT MIN(age) FROM Sailor GROUP BY rating)
-AND age>=18;
+b) List the youngest sailor for each rating who can vote
+👉 Voting age assumed as 18 years
 
 
-c) Red & Green
-Copy code
-Sql
-SELECT sid FROM Reserves r JOIN Boats b
-ON r.bid=b.bid
-WHERE colour='RED'
-INTERSECT
-SELECT sid FROM Reserves r JOIN Boats b
-ON r.bid=b.bid
-WHERE colour='GREEN';
+SELECT sid, sname, rating, age
+FROM SAILOR s
+WHERE age >= 18
+AND age = (
+    SELECT MIN(age)
+    FROM SAILOR
+    WHERE rating = s.rating
+);
 
 
-d) Synonym
-Copy code
-Sql
-CREATE SYNONYM sailor_syn FOR Sailor;
+c) List the sailors who have reserved both ‘RED’ and ‘GREEN’ boats
 
 
-e) Function
-Copy code
-Sql
-CREATE OR REPLACE FUNCTION sailor_name(p_sid NUMBER)
-RETURN VARCHAR2 IS v_name VARCHAR2(30);
+SELECT s.sid, s.sname
+FROM SAILOR s
+JOIN RESERVES r ON s.sid = r.sid
+JOIN BOATS b ON r.bid = b.bid
+WHERE b.colour IN ('RED', 'GREEN')
+GROUP BY s.sid, s.sname
+HAVING COUNT(DISTINCT b.colour) = 2;
+
+
+d) Create a synonym for SAILOR table
+
+CREATE SYNONYM sailor_syn FOR SAILOR;
+
+
+▶ Usage
+SELECT * FROM sailor_syn;
+
+
+
+e) PL/SQL Function that accepts SID and returns Sailor Name
+
+
+CREATE OR REPLACE FUNCTION get_sailor_name (
+    p_sid IN SAILOR.sid%TYPE
+) RETURN VARCHAR2 IS
+    v_name SAILOR.sname%TYPE;
 BEGIN
-  SELECT sname INTO v_name FROM Sailor WHERE sid=p_sid;
-  RETURN v_name;
+    SELECT sname
+    INTO v_name
+    FROM SAILOR
+    WHERE sid = p_sid;
+
+    RETURN v_name;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'Sailor not found';
+    WHEN OTHERS THEN
+        RETURN 'Error occurred';
 END;
 /
+
+
+▶ Function Call
+SELECT get_sailor_name(101) FROM dual;
