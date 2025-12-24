@@ -65,61 +65,62 @@ Department (Dname, Deptno, Dloc)
 
 
 [10]
-Create the following tables with given attributes having appropriate data
-type and specify the necessary primary and foreign key constraints:
-Voter (VoterId, Votername, Gender, Boothid,Checkvote) checkvote is 1(voted) or 0
-(not voted)
-Booth (Boothid, Location,BIncharge )
+Create the following tables with given attributes having appropriate data type and specify the  necessary primary and foreign key constraints: 
+Voter (VoterId, Votername, Gender, Boothid,Checkvote) checkvote is 1(voted) or 0 (not voted) 
+Booth (Boothid, Location,BIncharge ) 
 #10
 
 
-[11].Consider the Insurance database given
-below. PERSON(driver_ID, name, address)
-CAR(regno, model,year )
-ACCIDENT(report_number,accd_date,location)
-OWNS(driver_id,regno)
+[11]
+Consider the Insurance database given below. 
+PERSON(driver_ID, name, address)  
+CAR(regno, model,year ) 
+ACCIDENT(report_number,accd_date,location) 
+OWNS(driver_id,regno) 
 PARTICIPATED(driver_id,regno,report_number,damage_amount)
-
 #11
 
 
 
-12. Create the Book database and do the following:
+[12]
+ Create the Book database and do the following: 
 book (book_name,author_name,price,quantity).
 #12
 
 
 
 
-13.Create the Company database with the following tables and do the following:
-Administration(employee_salary, development _cost, fund_amount, turn_over,bonus)
-Emp_details (emp_no, emp_name, DOB, address, doj, mobile_no, dept_no, salary).
 
+[13]
+Create the Company database with the following tables and do the following: 
+Administration(employee_salary, development_cost, fund_amount,turn_over,bonus) 
+Emp_details (emp_no, emp_name, DOB, address, doj, mobile_no, dept_no, salary). 
 #13
 
 
 
-14.Create the student database with the following tables and do the following:
-Assessment(reg_no,name, mark1, mark2, mark3, total)
-Dept_Details (dept_no, dept_name, location).
+[14]
+Create the student database with the following tables and do the following:  
+Assessment(reg_no,name, mark1, mark2, mark3, total) 
+Dept_Details (dept_no, dept_name, location). 
 #14
 
 
-
-15. Consider the following Tables for a bus reservation system
-application:
-BUS (ROUTENO, SOURCE, DESTINATION)
-PASSENGER (PID, PNAME, DOB, GENDER)
-BOOK_TICKET (PID, ROUTENO, JOURNEY_DATE, SEAT_NO)
+[15]
+Consider the following Tables for a bus reservation system application: 
+BUS (ROUTENO, SOURCE, DESTINATION) 
+PASSENGER (PID, PNAME, DOB, GENDER) 
+BOOK_TICKET (PID, ROUTENO, JOURNEY_DATE, SEAT_NO) 
 #15
 
 
-
-16. Consider the following tables. SAILOR(sid, sname, rating, age)
-BOATS(bid, bname, colour)
-
-RESERVES(sid, bid, day)
+[16]
+Consider the following tables.  
+SAILOR(sid, sname, rating, age) 
+BOATS(bid, bname, colour) 
+RESERVES(sid, bid, day) 
 #16
+
 
 
 
