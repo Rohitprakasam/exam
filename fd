@@ -1,0 +1,283 @@
+
+a) Display Even Numbers from List
+Aim:
+To create a list and display even numbers.
+Procedure:
+Create a list.
+Use loop.
+Check number % 2 == 0.
+Print even numbers.
+Program:
+Python
+Copy code
+numbers = [10, 15, 22, 33, 40, 55]
+
+for n in numbers:
+    if n % 2 == 0:
+        print(n)
+Output:
+Copy code
+
+10
+22
+40
+Result:
+Even numbers are displayed successfully.
+b) Find Maximum in Tuple
+Aim:
+To find maximum value in tuple.
+Procedure:
+Create tuple.
+Use max() function.
+Print result.
+Program:
+Python
+Copy code
+t = (12, 45, 7, 89, 23)
+print(max(t))
+Output:
+Copy code
+
+89
+Result:
+Maximum value found successfully.
+c) Students Scoring Above 80
+Aim:
+To display students scoring above 80.
+Procedure:
+Create dictionary.
+Use loop.
+Check marks > 80.
+Print names.
+Program:
+Python
+Copy code
+marks = {"Arun": 75, "Priya": 85, "Kumar": 90, "Divya": 60}
+
+for name, score in marks.items():
+    if score > 80:
+        print(name)
+Output:
+Copy code
+
+Priya
+Kumar
+Result:
+Students scoring above 80 displayed.
+✅ Problem 2
+a) Remove Values Less Than 20
+Aim:
+To remove values less than 20 from list.
+Procedure:
+Create list.
+Use list comprehension.
+Print filtered list.
+Program:
+Python
+Copy code
+numbers = [10, 25, 5, 40, 18, 60]
+filtered = [n for n in numbers if n >= 20]
+print(filtered)
+Output:
+Copy code
+
+[25, 40, 60]
+Result:
+Values less than 20 removed successfully.
+b) Add New Key-Value in Dictionary
+Aim:
+To update dictionary by adding new key-value pair.
+Procedure:
+Create dictionary.
+Add new key.
+Print dictionary.
+Program:
+Python
+Copy code
+d = {"A": 10, "B": 20}
+d["C"] = 30
+print(d)
+Output:
+Copy code
+
+{'A': 10, 'B': 20, 'C': 30}
+Result:
+Dictionary updated successfully.
+c) Convert Tuple to List and Sort
+Aim:
+To convert tuple into list and sort.
+Procedure:
+Create tuple.
+Convert using list().
+Use sort().
+Print result.
+Program:
+Python
+Copy code
+t = (50, 20, 40, 10, 30)
+lst = list(t)
+lst.sort()
+print(lst)
+Output:
+Copy code
+
+[10, 20, 30, 40, 50]
+Result:
+Tuple converted and sorted successfully.
+✅ Problem 3 (Pandas – Line Graph)
+a, b, c Combined
+Aim:
+To import dataset and plot line graph of Marks vs Student_ID.
+Procedure:
+Import pandas and matplotlib.
+Create/load dataset.
+Plot line graph.
+Label axes and title.
+Program:
+Python
+Copy code
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = {
+    "Student_ID": [1, 2, 3, 4, 5],
+    "Marks": [70, 85, 90, 60, 75]
+}
+
+df = pd.DataFrame(data)
+
+plt.plot(df["Student_ID"], df["Marks"])
+plt.xlabel("Student_ID")
+plt.ylabel("Marks")
+plt.title("Marks vs Student_ID")
+plt.show()
+Output:
+Line graph displayed.
+Result:
+Line graph plotted successfully.
+✅ Problem 4 (NumPy Operations)
+a, b, c Combined
+Aim:
+To perform addition, multiplication and find max & min.
+Procedure:
+Import numpy.
+Create two arrays.
+Perform operations.
+Print results.
+Program:
+Python
+Copy code
+import numpy as np
+
+a = np.array([1,2,3,4,5])
+b = np.array([5,4,3,2,1])
+
+print("Addition:", a + b)
+print("Multiplication:", a * b)
+print("Max:", a.max())
+print("Min:", a.min())
+Output:
+Copy code
+
+Addition: [6 6 6 6 6]
+Multiplication: [5 8 9 8 5]
+Max: 5
+Min: 1
+Result:
+Operations performed successfully.
+✅ Problem 5 (NumPy Reshape)
+Aim:
+To reshape array and find sum & mean.
+Procedure:
+Create array.
+Reshape to 5x1.
+Find sum and mean.
+Program:
+Python
+Copy code
+import numpy as np
+
+arr = np.array([10, 20, 30, 40, 50])
+reshaped = arr.reshape(5,1)
+
+print("Sum:", arr.sum())
+print("Mean:", arr.mean())
+Output:
+Copy code
+
+Sum: 150
+Mean: 30.0
+Result:
+Array reshaped and values calculated.
+✅ Problem 6 (Check Missing Values – Pandas)
+Aim:
+To check missing values in DataFrame.
+Procedure:
+Create DataFrame.
+Use isnull().sum().
+Display result.
+Program:
+Python
+Copy code
+import pandas as pd
+
+data = {"A":[1,None,3], "B":[4,5,None]}
+df = pd.DataFrame(data)
+
+print(df.isnull().sum())
+Output:
+Copy code
+
+A    1
+B    1
+dtype: int64
+Result:
+Missing values counted successfully.
+✅ Problem 7 (Pandas Summary)
+Aim:
+To display first rows, columns and summary.
+Procedure:
+Create DataFrame.
+Use head().
+Use info().
+Use describe().
+Program:
+Python
+Copy code
+import pandas as pd
+
+df = pd.DataFrame({
+    "Name": ["A","B","C","D","E"],
+    "Marks": [70,85,90,60,75]
+})
+
+print(df.head(10))
+print(df.dtypes)
+print(df.describe())
+Output:
+First rows, data types and statistics displayed.
+Result:
+DataFrame details displayed successfully.
+✅ Problem 8 (Load CSV File)
+Aim:
+To load CSV and display data.
+Procedure:
+Import pandas.
+Load CSV using read_csv().
+Display head().
+Display shape.
+Program:
+Python
+Copy code
+import pandas as pd
+
+df = pd.read_csv("student.csv")
+
+print(df.head())
+print(df.shape)
+Output:
+First 5 records and dataset shape displayed.
+Result:
+CSV file loaded and displayed successfully.
+You are fully prepared for lab exam format now.
+If you want, I can also give a one-page quick revision sheet for last-minute preparation.
