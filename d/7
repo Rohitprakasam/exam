@@ -1,0 +1,202 @@
+LEX Program
+
+Save as:
+backend.l
+
+
+%{
+#include "y.tab.h"
+#include<stdio.h>
+#include<string.h>
+%}
+
+%%
+
+[a-zA-Z][a-zA-Z0-9]*
+{
+    strcpy(yylval.str, yytext);
+    return ID;
+}
+
+[0-9]+
+{
+    strcpy(yylval.str, yytext);
+    return NUM;
+}
+
+"="     return '=';
+"+"     return '+';
+"-"     return '-';
+"*"     return '*';
+"/"     return '/';
+
+[ \t]
+    ;
+
+\n
+    return '\n';
+
+.
+    return yytext[0];
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+
+
+
+YACC Program
+
+Save as:
+backend.y
+
+
+
+%{
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+void yyerror(char *s);
+int yylex();
+%}
+
+/* Union */
+
+%union
+{
+    char str[20];
+}
+
+/* Tokens */
+
+%token <str> ID NUM
+
+/* Types */
+
+%type <str> expr
+
+%%
+
+program:
+          statement
+          ;
+
+statement:
+
+          ID '=' expr '\n'
+          {
+                printf("\n8086 Assembly Code:\n");
+
+                printf("MOV AX, %s\n", $3);
+
+                printf("MOV %s, AX\n", $1);
+          }
+          ;
+
+expr:
+
+        ID '+' ID
+        {
+            printf("MOV AX, %s\n", $1);
+
+            printf("ADD AX, %s\n", $3);
+
+            strcpy($$, "AX");
+        }
+
+      | ID '-' ID
+        {
+            printf("MOV AX, %s\n", $1);
+
+            printf("SUB AX, %s\n", $3);
+
+            strcpy($$, "AX");
+        }
+
+      | ID '*' ID
+        {
+            printf("MOV AX, %s\n", $1);
+
+            printf("MOV BX, %s\n", $3);
+
+            printf("MUL BX\n");
+
+            strcpy($$, "AX");
+        }
+
+      | ID '/' ID
+        {
+            printf("MOV AX, %s\n", $1);
+
+            printf("MOV BX, %s\n", $3);
+
+            printf("DIV BX\n");
+
+            strcpy($$, "AX");
+        }
+
+      | NUM
+        {
+            strcpy($$, $1);
+        }
+
+      | ID
+        {
+            strcpy($$, $1);
+        }
+        ;
+
+%%
+
+void yyerror(char *s)
+{
+    printf("Invalid Statement\n");
+}
+
+int main()
+{
+    printf("Enter Three Address Code Statement:\n");
+
+    yyparse();
+
+    return 0;
+}
+
+
+
+
+
+Steps to Execute in Cygwin64
+
+Step 1: Generate YACC File
+yacc -d backend.y
+Generated files:
+y.tab.c
+y.tab.h
+
+Step 2: Generate LEX File
+flex backend.l
+Generated file:
+lex.yy.c
+
+Step 3: Compile
+gcc lex.yy.c y.tab.c -o backend
+If error occurs:
+gcc lex.yy.c y.tab.c -o backend -lfl
+
+Step 4: Run
+./backend
+
+
+
+Sample Input 1
+a=b+c
+
+
+
+
