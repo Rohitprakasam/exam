@@ -122,3 +122,13 @@ gcc lex.yy.c y.tab.c -o expr -lfl
 
 Step 4: Run
 ./expr
+
+
+
+
+Sample Input
+5+3
+10-2
+4*5
+20/4
+(5+3)*2
