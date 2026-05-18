@@ -1,113 +1,119 @@
-Create Tables with Primary & Foreign Key Constraints
-Booth Table
+%{
+#include<stdio.h>
+#include<string.h>
+%}
 
-CREATE TABLE Booth (
-    Boothid NUMBER PRIMARY KEY,
-    Location VARCHAR2(30),
-    BIncharge VARCHAR2(30)
-);
+/* Definitions */
 
-Voter Table
+digit      [0-9]
+letter     [a-zA-Z]
+id         {letter}({letter}|{digit})*
+number     {digit}+
 
+%%
 
-CREATE TABLE Voter (
-    VoterId NUMBER PRIMARY KEY,
-    Votername VARCHAR2(30),
-    Gender CHAR(1),
-    Boothid NUMBER,
-    Checkvote NUMBER(1),
-    CONSTRAINT fk_voter_booth FOREIGN KEY (Boothid)
-    REFERENCES Booth(Boothid),
-    CONSTRAINT chk_vote CHECK (Checkvote IN (0,1))
-);
+/* Keywords */
 
+"int"|"float"|"char"|"if"|"else"|"while"|"return"
+{
+    printf("KEYWORD : %s\n", yytext);
+}
 
-a)
-(i) List the count of voters in each Booth
+/* Identifiers */
 
+{id}
+{
+    printf("IDENTIFIER : %s\n", yytext);
+}
 
-SELECT Boothid,
-       COUNT(VoterId) AS Total_Voters
-FROM Voter
-GROUP BY Boothid;
+/* Constants */
 
-(ii) List the count of Male voters who voted
+{number}
+{
+    printf("CONSTANT : %s\n", yytext);
+}
 
+/* Operators */
 
-SELECT COUNT(*) AS Male_Voters_Voted
-FROM Voter
-WHERE Gender = 'M'
-AND Checkvote = 1;
+"+"|"-"|"*"|"/"|"="|"=="|"<"|">"
+{
+    printf("OPERATOR : %s\n", yytext);
+}
 
-b) Display the overall count of voters who voted
+/* Special Symbols */
 
+";"|","|"("|")"|"{"|"}"
+{
+    printf("SPECIAL SYMBOL : %s\n", yytext);
+}
 
-SELECT COUNT(*) AS Total_Voted
-FROM Voter
-WHERE Checkvote = 1;
+/* Ignore Spaces */
 
+[ \t\n]+   ;
 
-c) Display the Boothid, Location and count of voters voted
+/* Invalid Characters */
 
+.
+{
+    printf("INVALID CHARACTER : %s\n", yytext);
+}
 
-SELECT b.Boothid,
-       b.Location,
-       COUNT(v.VoterId) AS Voted_Count
-FROM Booth b
-JOIN Voter v
-ON b.Boothid = v.Boothid
-WHERE v.Checkvote = 1
-GROUP BY b.Boothid, b.Location;
+%%
 
+int main()
+{
+    printf("Enter the C program:\n");
 
+    yylex();
 
-d) PL/SQL Function to return percentage of poll in a booth
-(With Exception Handling)
+    return 0;
+}
 
-
-CREATE OR REPLACE FUNCTION poll_percentage (
-    p_boothid IN Voter.Boothid%TYPE
-) RETURN NUMBER IS
-    v_total NUMBER;
-    v_voted NUMBER;
-    v_percent NUMBER;
-BEGIN
-    SELECT COUNT(*) INTO v_total
-    FROM Voter
-    WHERE Boothid = p_boothid;
-
-    SELECT COUNT(*) INTO v_voted
-    FROM Voter
-    WHERE Boothid = p_boothid
-    AND Checkvote = 1;
-
-    IF v_total = 0 THEN
-        RETURN 0;
-    END IF;
-
-    v_percent := (v_voted / v_total) * 100;
-    RETURN v_percent;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN 0;
-    WHEN OTHERS THEN
-        RETURN -1;
-END;
-/
+int yywrap()
+{
+    return 1;
+}
 
 
-▶ Function Call
-SELECT poll_percentage(101) FROM dual;
 
 
-🧪 Sample Data (Optional – For Testing)
-INSERT INTO Booth VALUES (101, 'Chennai', 'Ravi');
-INSERT INTO Booth VALUES (102, 'Madurai', 'Suresh');
 
-INSERT INTO Voter VALUES (1, 'ARUN', 'M', 101, 1);
-INSERT INTO Voter VALUES (2, 'SITA', 'F', 101, 1);
-INSERT INTO Voter VALUES (3, 'KUMAR', 'M', 101, 0);
-INSERT INTO Voter VALUES (4, 'RAJ', 'M', 102, 1);
 
-COMMIT;
+Steps to Execute in Cygwin64
+Step 1: Save the file
+Save the program as:
+lexer.l
+
+Step 2: Generate C file using FLEX
+flex lexer.l
+This generates:
+lex.yy.c
+
+Step 3: Compile the program
+gcc lex.yy.c -o lexer
+If needed:
+gcc lex.yy.c -o lexer -lfl
+
+Step 4: Run the program
+./lexer
+
+
+
+
+
+
+
+
+
+
+
+Sample Input
+int main()
+{
+    int a = 10;
+    float b = 20;
+
+    a = a + b;
+
+    return 0;
+}
