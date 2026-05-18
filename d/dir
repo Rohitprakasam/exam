@@ -8,39 +8,39 @@ Implement a Lexical Analyzer using LEX Tool
 
 [3]
 a. Program to recognize a valid arithmetic expression that uses operators +, *, and /. 
-#3
+#3A
 
 
 [4]
 b. Program to recognize a valid variable that starts with a letter followed by any number of letters or digits.
-#4
+#3B
 
 [5]
 c. Program to recognize a valid controlstructure syntax of the C language (for loop, while loop, if-else, if-else-if, switch-case etc.…)  
-#5
+#3C
 
 [6]
 d.Implementation of calculator using LEX and YACC  
-#6
+#3D
 
 [7]
 Generate three-address code for a simple program using LEX and YACC.
-#7
+#4
 
 
 [8]
 Implement type checking using Lex and Yacc. 
-#8
+#5
 
 
 [9]
 Implement simple code optimization techniques (Constant folding, strength reduction, and Algebraic transformation) 
-#9
+#6
 
 
 [10]
 Implement the back-end of the compiler for which the three-address code is given as an input and the 8086-assembly language code is produced as output.
-#10
+#7
 
 
 
