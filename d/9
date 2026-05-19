@@ -1,0 +1,76 @@
+Experiment — Disk Scheduling using FCFS
+
+Aim
+To implement FCFS Disk Scheduling Algorithm.
+
+Algorithm
+Read disk request sequence.
+Read initial head position.
+Move disk head in request order.
+Calculate seek time:
+Distance = |Current Head - Request|
+Add total seek time.
+Display seek sequence and total seek time.
+
+
+
+Program
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int n, i;
+    int req[50];
+    int head, total = 0;
+
+    printf("Enter number of disk requests: ");
+    scanf("%d", &n);
+
+    printf("Enter disk request sequence:\n");
+
+    for(i = 0; i < n; i++)
+    {
+        scanf("%d", &req[i]);
+    }
+
+    printf("Enter initial head position: ");
+    scanf("%d", &head);
+
+    printf("\nSeek Sequence:\n");
+
+    for(i = 0; i < n; i++)
+    {
+        printf("%d -> ", req[i]);
+
+        total += abs(req[i] - head);
+
+        head = req[i];
+    }
+
+    printf("\n\nTotal Seek Time = %d\n", total);
+
+    return 0;
+}
+
+
+Compile and Run
+gcc diskfcfs.c
+./a.out
+
+
+Sample Input
+Enter number of disk requests: 8
+
+Enter disk request sequence:
+98 183 37 122 14 124 65 67
+
+Enter initial head position: 53
+
+
+
+Sample Output
+Seek Sequence:
+98 -> 183 -> 37 -> 122 -> 14 -> 124 -> 65 -> 67 ->
+
+Total Seek Time = 640
