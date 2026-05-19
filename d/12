@@ -1,0 +1,104 @@
+Aim
+To implement Indexed File Allocation method.
+
+Program
+#include <stdio.h>
+
+int main()
+{
+    int f[50], index[50];
+    int i, j, n, ind, count;
+
+    for(i = 0; i < 50; i++)
+    {
+        f[i] = 0;
+    }
+
+    printf("Enter number of files: ");
+    scanf("%d", &n);
+
+    for(i = 0; i < n; i++)
+    {
+        printf("\nEnter index block for file %d: ",
+               i + 1);
+
+        scanf("%d", &ind);
+
+        if(f[ind] == 1)
+        {
+            printf("Index block already allocated\n");
+        }
+        else
+        {
+            printf("Enter number of blocks needed: ");
+            scanf("%d", &count);
+
+            printf("Enter blocks:\n");
+
+            int flag = 0;
+
+            for(j = 0; j < count; j++)
+            {
+                scanf("%d", &index[j]);
+
+                if(f[index[j]] == 1)
+                {
+                    flag = 1;
+                }
+            }
+
+            if(flag == 0)
+            {
+                f[ind] = 1;
+
+                for(j = 0; j < count; j++)
+                {
+                    f[index[j]] = 1;
+                }
+
+                printf("File allocated successfully\n");
+
+                printf("Index Block: %d\n", ind);
+
+                printf("Allocated blocks: ");
+
+                for(j = 0; j < count; j++)
+                {
+                    printf("%d ", index[j]);
+                }
+
+                printf("\n");
+            }
+            else
+            {
+                printf("File cannot be allocated\n");
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+Compile and Run
+gcc indexed.c
+./a.out
+
+
+
+Sample Input
+Enter number of files: 1
+Enter index block for file 1:
+10
+Enter number of blocks needed:
+4
+
+
+Enter blocks:
+2 5 7 9
+Sample Output
+File allocated successfully
+Index Block: 10
+Allocated blocks: 2 5 7 9
