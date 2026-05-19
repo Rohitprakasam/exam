@@ -1,119 +1,87 @@
-%{
-#include<stdio.h>
-#include<string.h>
-%}
+Experiment 2 — Process Management System Calls
 
-/* Definitions */
+Aim
+To study process management system calls in UNIX using C programming.
 
-digit      [0-9]
-letter     [a-zA-Z]
-id         {letter}({letter}|{digit})*
-number     {digit}+
+Algorithm
+Start the program.
+Use fork() to create child process.
+If pid == 0, execute child process.
+Else execute parent process.
+Parent waits using wait().
+Display process IDs.
+Stop the program.
 
-%%
 
-/* Keywords */
+System Calls Used
+fork() → Create new process
+getpid() → Get process ID
+getppid() → Get parent process ID
+wait() → Parent waits for child
+exit() → Terminate process
 
-"int"|"float"|"char"|"if"|"else"|"while"|"return"
-{
-    printf("KEYWORD : %s\n", yytext);
-}
 
-/* Identifiers */
 
-{id}
-{
-    printf("IDENTIFIER : %s\n", yytext);
-}
 
-/* Constants */
+Program
 
-{number}
-{
-    printf("CONSTANT : %s\n", yytext);
-}
-
-/* Operators */
-
-"+"|"-"|"*"|"/"|"="|"=="|"<"|">"
-{
-    printf("OPERATOR : %s\n", yytext);
-}
-
-/* Special Symbols */
-
-";"|","|"("|")"|"{"|"}"
-{
-    printf("SPECIAL SYMBOL : %s\n", yytext);
-}
-
-/* Ignore Spaces */
-
-[ \t\n]+   ;
-
-/* Invalid Characters */
-
-.
-{
-    printf("INVALID CHARACTER : %s\n", yytext);
-}
-
-%%
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdlib.h>
 
 int main()
 {
-    printf("Enter the C program:\n");
+    pid_t pid;
 
-    yylex();
+    pid = fork();
+
+    if(pid < 0)
+    {
+        printf("Fork Failed\n");
+    }
+    else if(pid == 0)
+    {
+        printf("\n--- CHILD PROCESS ---\n");
+        printf("Child PID : %d\n", getpid());
+        printf("Parent PID: %d\n", getppid());
+
+        printf("Child Process Executing...\n");
+
+        exit(0);
+    }
+    else
+    {
+        wait(NULL);
+
+        printf("\n--- PARENT PROCESS ---\n");
+        printf("Parent PID : %d\n", getpid());
+        printf("Child PID  : %d\n", pid);
+
+        printf("Parent Process Executing...\n");
+    }
 
     return 0;
 }
 
-int yywrap()
-{
-    return 1;
-}
 
 
 
+Compile and Run in PuTTY
+
+gcc process.c
+./a.out
 
 
 
-Steps to Execute in Cygwin64
-Step 1: Save the file
-Save the program as:
-lexer.l
+Sample Output
+--- CHILD PROCESS ---
+Child PID : 2345
+Parent PID: 2344
+Child Process Executing...
 
-Step 2: Generate C file using FLEX
-flex lexer.l
-This generates:
-lex.yy.c
-
-Step 3: Compile the program
-gcc lex.yy.c -o lexer
-If needed:
-gcc lex.yy.c -o lexer -lfl
-
-Step 4: Run the program
-./lexer
-
-
-
-
-
-
-
-
-
-
-
-Sample Input
-int main()
-{
-    int a = 10;
-    float b = 20;
-
-    a = a + b;
-
-    return 0;
-}
+--- PARENT PROCESS ---
+Parent PID : 2344
+Child PID  : 2345
+Parent Process Executing...
