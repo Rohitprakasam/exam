@@ -1,202 +1,187 @@
-LEX Program
+Experiment — Memory Allocation (First Fit, Best Fit, Worst Fit)
 
-Save as:
-backend.l
+Aim
+To implement First Fit, Best Fit and Worst Fit memory allocation techniques.
 
-
-%{
-#include "y.tab.h"
-#include<stdio.h>
-#include<string.h>
-%}
-
-%%
-
-[a-zA-Z][a-zA-Z0-9]*
-{
-    strcpy(yylval.str, yytext);
-    return ID;
-}
-
-[0-9]+
-{
-    strcpy(yylval.str, yytext);
-    return NUM;
-}
-
-"="     return '=';
-"+"     return '+';
-"-"     return '-';
-"*"     return '*';
-"/"     return '/';
-
-[ \t]
-    ;
-
-\n
-    return '\n';
-
-.
-    return yytext[0];
-
-%%
-
-int yywrap()
-{
-    return 1;
-}
+Algorithm
+Read memory block sizes and process sizes.
+In First Fit:
+Allocate first sufficient block.
+In Best Fit:
+Allocate smallest suitable block.
+In Worst Fit:
+Allocate largest suitable block.
+Display allocation results.
 
 
 
+Program:
 
-YACC Program
-
-Save as:
-backend.y
-
-
-
-%{
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-void yyerror(char *s);
-int yylex();
-%}
-
-/* Union */
-
-%union
-{
-    char str[20];
-}
-
-/* Tokens */
-
-%token <str> ID NUM
-
-/* Types */
-
-%type <str> expr
-
-%%
-
-program:
-          statement
-          ;
-
-statement:
-
-          ID '=' expr '\n'
-          {
-                printf("\n8086 Assembly Code:\n");
-
-                printf("MOV AX, %s\n", $3);
-
-                printf("MOV %s, AX\n", $1);
-          }
-          ;
-
-expr:
-
-        ID '+' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("ADD AX, %s\n", $3);
-
-            strcpy($$, "AX");
-        }
-
-      | ID '-' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("SUB AX, %s\n", $3);
-
-            strcpy($$, "AX");
-        }
-
-      | ID '*' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("MOV BX, %s\n", $3);
-
-            printf("MUL BX\n");
-
-            strcpy($$, "AX");
-        }
-
-      | ID '/' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("MOV BX, %s\n", $3);
-
-            printf("DIV BX\n");
-
-            strcpy($$, "AX");
-        }
-
-      | NUM
-        {
-            strcpy($$, $1);
-        }
-
-      | ID
-        {
-            strcpy($$, $1);
-        }
-        ;
-
-%%
-
-void yyerror(char *s)
-{
-    printf("Invalid Statement\n");
-}
+#include <stdio.h>
 
 int main()
 {
-    printf("Enter Three Address Code Statement:\n");
+    int b[20], p[20], nb, np;
+    int i, j;
 
-    yyparse();
+    printf("Enter number of memory blocks: ");
+    scanf("%d", &nb);
+
+    printf("Enter number of processes: ");
+    scanf("%d", &np);
+
+    printf("Enter block sizes:\n");
+
+    for(i = 0; i < nb; i++)
+    {
+        scanf("%d", &b[i]);
+    }
+
+    printf("Enter process sizes:\n");
+
+    for(i = 0; i < np; i++)
+    {
+        scanf("%d", &p[i]);
+    }
+
+    printf("\n----- FIRST FIT -----\n");
+
+    int temp1[20];
+
+    for(i = 0; i < nb; i++)
+        temp1[i] = b[i];
+
+    for(i = 0; i < np; i++)
+    {
+        for(j = 0; j < nb; j++)
+        {
+            if(temp1[j] >= p[i])
+            {
+                printf("Process %d allocated to Block %d\n",
+                       i + 1, j + 1);
+
+                temp1[j] -= p[i];
+                break;
+            }
+        }
+
+        if(j == nb)
+            printf("Process %d not allocated\n", i + 1);
+    }
+
+    printf("\n----- BEST FIT -----\n");
+
+    int temp2[20];
+
+    for(i = 0; i < nb; i++)
+        temp2[i] = b[i];
+
+    for(i = 0; i < np; i++)
+    {
+        int best = -1;
+
+        for(j = 0; j < nb; j++)
+        {
+            if(temp2[j] >= p[i])
+            {
+                if(best == -1 || temp2[j] < temp2[best])
+                    best = j;
+            }
+        }
+
+        if(best != -1)
+        {
+            printf("Process %d allocated to Block %d\n",
+                   i + 1, best + 1);
+
+            temp2[best] -= p[i];
+        }
+        else
+        {
+            printf("Process %d not allocated\n", i + 1);
+        }
+    }
+
+    printf("\n----- WORST FIT -----\n");
+
+    int temp3[20];
+
+    for(i = 0; i < nb; i++)
+        temp3[i] = b[i];
+
+    for(i = 0; i < np; i++)
+    {
+        int worst = -1;
+
+        for(j = 0; j < nb; j++)
+        {
+            if(temp3[j] >= p[i])
+            {
+                if(worst == -1 || temp3[j] > temp3[worst])
+                    worst = j;
+            }
+        }
+
+        if(worst != -1)
+        {
+            printf("Process %d allocated to Block %d\n",
+                   i + 1, worst + 1);
+
+            temp3[worst] -= p[i];
+        }
+        else
+        {
+            printf("Process %d not allocated\n", i + 1);
+        }
+    }
 
     return 0;
 }
 
 
 
-
-
-Steps to Execute in Cygwin64
-
-Step 1: Generate YACC File
-yacc -d backend.y
-Generated files:
-y.tab.c
-y.tab.h
-
-Step 2: Generate LEX File
-flex backend.l
-Generated file:
-lex.yy.c
-
-Step 3: Compile
-gcc lex.yy.c y.tab.c -o backend
-If error occurs:
-gcc lex.yy.c y.tab.c -o backend -lfl
-
-Step 4: Run
-./backend
-
-
-
-Sample Input 1
-a=b+c
+Compile and Run
+gcc memory.c
+./a.out
 
 
 
 
+Sample Input
+Enter number of memory blocks: 5
+Enter number of processes: 4
+
+Enter block sizes:
+100
+500
+200
+300
+600
+
+Enter process sizes:
+212
+417
+112
+426
+
+
+
+
+Sample Output
+----- FIRST FIT -----
+Process 1 allocated to Block 2
+Process 2 allocated to Block 5
+Process 3 allocated to Block 2
+Process 4 not allocated
+
+----- BEST FIT -----
+Process 1 allocated to Block 4
+Process 2 allocated to Block 2
+Process 3 allocated to Block 3
+Process 4 allocated to Block 5
+
+----- WORST FIT -----
+Process 1 allocated to Block 5
+Process 2 allocated to Block 2
+Process 3 allocated to Block 5
+Process 4 not allocated
