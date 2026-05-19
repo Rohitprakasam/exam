@@ -1,0 +1,116 @@
+Experiment — FIFO Page Replacement Algorithm
+
+Aim
+To implement FIFO (First In First Out) Page Replacement Algorithm.
+
+Algorithm
+Read page reference string.
+Read number of frames.
+Check whether page is already present.
+If not present:
+Replace oldest page using FIFO rule.
+Increment page fault count.
+Display frame contents.
+Display total page faults.
+
+Program:
+#include <stdio.h>
+
+int main()
+{
+    int pages[50], frame[10];
+    int n, f, i, j, k = 0;
+    int flag, pageFault = 0;
+
+    printf("Enter number of pages: ");
+    scanf("%d", &n);
+
+    printf("Enter page reference string:\n");
+
+    for(i = 0; i < n; i++)
+    {
+        scanf("%d", &pages[i]);
+    }
+
+    printf("Enter number of frames: ");
+    scanf("%d", &f);
+
+    for(i = 0; i < f; i++)
+    {
+        frame[i] = -1;
+    }
+
+    printf("\nPage\tFrames\n");
+
+    for(i = 0; i < n; i++)
+    {
+        flag = 0;
+
+        for(j = 0; j < f; j++)
+        {
+            if(frame[j] == pages[i])
+            {
+                flag = 1;
+                break;
+            }
+        }
+
+        if(flag == 0)
+        {
+            frame[k] = pages[i];
+            k = (k + 1) % f;
+            pageFault++;
+        }
+
+        printf("%d\t", pages[i]);
+
+        for(j = 0; j < f; j++)
+        {
+            if(frame[j] != -1)
+                printf("%d ", frame[j]);
+            else
+                printf("- ");
+        }
+
+        printf("\n");
+    }
+
+    printf("\nTotal Page Faults = %d\n", pageFault);
+
+    return 0;
+}
+
+
+
+
+Compile and Run
+gcc fifo.c
+./a.out
+
+
+Sample Input
+Enter number of pages: 12
+
+Enter page reference string:
+1 2 3 4 1 2 5 1 2 3 4 5
+
+Enter number of frames: 3
+
+
+
+Sample Output
+Page    Frames
+1       1 - -
+2       1 2 -
+3       1 2 3
+4       4 2 3
+1       4 1 3
+2       4 1 2
+5       5 1 2
+1       5 1 2
+2       5 1 2
+3       5 3 2
+4       5 3 4
+5       5 3 4
+
+Total Page Faults = 9
