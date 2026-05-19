@@ -1,46 +1,55 @@
 [1]
-Using the LEX tool, develop a lexical analyzer to recognize a few patterns in C (like identifiers, constants, comments, operators, etc.). Create a symbol table while recognizing identifiers. 
+study of UNIX & utilities 
 #1 
 
 [2]
-Implement a Lexical Analyzer using LEX Tool
-#2
+process management system using system calls (4pgms)#2
 
 [3]
-a. Program to recognize a valid arithmetic expression that uses operators +, *, and /. 
+cpu scheduling FCFS
 #3A
 
 
 [4]
-b. Program to recognize a valid variable that starts with a letter followed by any number of letters or digits.
-#3B
+CPU SCHEDULING SJF
+#4
 
 [5]
-c. Program to recognize a valid controlstructure syntax of the C language (for loop, while loop, if-else, if-else-if, switch-case etc.…)  
-#3C
+implementation of semephore and multithreading
+#5
 
 [6]
-d.Implementation of calculator using LEX and YACC  
-#3D
+deadlock avoidance using banker algorithm 
+#6
 
 [7]
-Generate three-address code for a simple program using LEX and YACC.
-#4
+memory allocation -first fir,best fit and worst fit
+#7
 
 
 [8]
-Implement type checking using Lex and Yacc. 
-#5
+FIFO page replacement algorithm
+#8
 
 
 [9]
-Implement simple code optimization techniques (Constant folding, strength reduction, and Algebraic transformation) 
-#6
+Disk scheduling FCFS
+#9
 
 
 [10]
-Implement the back-end of the compiler for which the three-address code is given as an input and the 8086-assembly language code is produced as output.
-#7
+Disk scheduling - SSTF
+#10
+
+[10]
+File allocation-Sequtial
+#11
+
+
+[12]
+File allocation indexed
+#12
+
 
 
 
