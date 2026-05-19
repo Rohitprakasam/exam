@@ -13,159 +13,79 @@ LEX Program
 
 %{
 #include "y.tab.h"
-#include<stdio.h>
-#include<string.h>
+#include <string.h>
 %}
-
 %%
-
-[a-zA-Z][a-zA-Z0-9]*
-{
-    strcpy(yylval.str, yytext);
-    return ID;
-}
-
-[0-9]+
-{
-    strcpy(yylval.str, yytext);
-    return NUM;
-}
-
-"="     return '=';
-"+"     return '+';
-"-"     return '-';
-"*"     return '*';
-"/"     return '/';
-
-[ \t]
-    ;
-
-\n
-    return '\n';
-
-.
-    return yytext[0];
-
+[a-zA-Z_][a-zA-Z0-9_]* { strcpy(yylval.name, yytext); return ID; }
+[0-9]+                  { strcpy(yylval.name, yytext); return NUM; }
+"="  return '=';
+"+"  return '+';
+"-"  return '-';
+"*"  return '*';
+"/"  return '/';
+\n   return '\n';
+[ \t]+ ;
 %%
-
-int yywrap()
-{
-    return 1;
-}
-
 
 YACC Program
 
+YACC Program (backend.y)
 %{
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-void yyerror(char *s);
+#include <stdio.h>
+#include <string.h>
 int yylex();
+void yyerror(const char *s);
 %}
-
-/* Union */
-
-%union
-{
-    char str[20];
+%union {
+    char name[20];
 }
-
-/* Tokens */
-
-%token <str> ID NUM
-
-/* Types */
-
-%type <str> expr
-
+%token <name> ID NUM
 %%
-
-program:
-          statement
-          ;
-
-statement:
-
-          ID '=' expr '\n'
-          {
-                printf("\n8086 Assembly Code:\n");
-
-                printf("MOV AX, %s\n", $3);
-
-                printf("MOV %s, AX\n", $1);
-          }
-          ;
-
-expr:
-
-        ID '+' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("ADD AX, %s\n", $3);
-
-            strcpy($$, "AX");
-        }
-
-      | ID '-' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("SUB AX, %s\n", $3);
-
-            strcpy($$, "AX");
-        }
-
-      | ID '*' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("MOV BX, %s\n", $3);
-
-            printf("MUL BX\n");
-
-            strcpy($$, "AX");
-        }
-
-      | ID '/' ID
-        {
-            printf("MOV AX, %s\n", $1);
-
-            printf("MOV BX, %s\n", $3);
-
-            printf("DIV BX\n");
-
-            strcpy($$, "AX");
-        }
-
-      | NUM
-        {
-            strcpy($$, $1);
-        }
-
-      | ID
-        {
-            strcpy($$, $1);
-        }
+program : program stmt
+        | stmt
         ;
-
+stmt : ID '=' ID '+' ID '\n'
+       {
+           printf("MOV AX, %s\n", $3);
+           printf("ADD AX, %s\n", $5);
+           printf("MOV %s, AX\n\n", $1);
+       }
+     | ID '=' ID '-' ID '\n'
+       {
+           printf("MOV AX, %s\n", $3);
+           printf("SUB AX, %s\n", $5);
+           printf("MOV %s, AX\n\n", $1);
+       }
+     | ID '=' ID '*' ID '\n'
+       {
+           printf("MOV AX, %s\n", $3);
+           printf("MOV BX, %s\n", $5);
+           printf("MUL BX\n");
+           printf("MOV %s, AX\n\n", $1);
+       }
+     | ID '=' ID '/' ID '\n'
+       {
+           printf("MOV AX, %s\n", $3);
+           printf("MOV BX, %s\n", $5);
+           printf("DIV BX\n");
+           printf("MOV %s, AX\n\n", $1);
+       }
+     | ID '=' ID '\n'
+       {
+           printf("MOV AX, %s\n", $3);
+           printf("MOV %s, AX\n\n", $1);
+       }
+     ;
 %%
-
-void yyerror(char *s)
-{
-    printf("Invalid Statement\n");
+void yyerror(const char *s) {
+    printf("Invalid TAC Statement\n");
 }
-
-int main()
-{
-    printf("Enter Three Address Code Statement:\n");
-
+int main() {
+    printf("Enter Three Address Code:\n\n");
     yyparse();
-
     return 0;
 }
+
 
 
 
