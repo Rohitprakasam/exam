@@ -1,3 +1,11 @@
 [1]
 Implement the back-end of the compiler for which the three-address code is given as an input and the 8086-assembly language code is produced as output. 
 #7
+
+[2]
+Program to recognize a valid controlstructure syntax of the C language (for loop, while loop, if-else, if-else-if, switch-case etc.…) 
+#3C
+
+[3]
+Implementation of calculator using LEX and YACC 
+#3D
