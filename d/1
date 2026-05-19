@@ -1,184 +1,40 @@
-1)
+Commands to Run in PuTTY
 
-%{
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
 
-int keyword_count = 0;
-int id_count = 0;
-int number_count = 0;
-int operator_count = 0;
-int comment_count = 0;
-
-/* Symbol Table */
-char symbol_table[100][100];
-int sym_index = 0;
-
-/* Function to insert identifier */
-void add_symbol(char *id)
-{
-    int i;
-
-    for(i=0; i<sym_index; i++)
-    {
-        if(strcmp(symbol_table[i], id) == 0)
-            return;
-    }
-
-    strcpy(symbol_table[sym_index], id);
-    sym_index++;
-}
-%}
-
-/* ===== Definitions ===== */
-
-digit      [0-9]
-letter     [a-zA-Z_]
-id         {letter}({letter}|{digit})*
-number     {digit}+(\.{digit}+)? 
-
-%%
-
-/* ===== Keywords ===== */
-"int"|
-"float"|
-"char"|
-"double"|
-"if"|
-"else"|
-"while"|
-"for"|
-"return"|
-"void"
-{
-    printf("KEYWORD : %s\n", yytext);
-    keyword_count++;
-}
-
-/* ===== Operators ===== */
-"+"|"-"|"*"|"/"|"="|"=="|"!="|"<"|">"|"<="|">="
-{
-    printf("OPERATOR : %s\n", yytext);
-    operator_count++;
-}
-
-/* ===== Numbers ===== */
-{number}
-{
-    printf("CONSTANT : %s\n", yytext);
-    number_count++;
-}
-
-/* ===== Identifiers ===== */
-{id}
-{
-    printf("IDENTIFIER : %s\n", yytext);
-
-    add_symbol(yytext);
-
-    id_count++;
-}
-
-/* ===== Single Line Comment ===== */
-"//".*
-{
-    printf("COMMENT : %s\n", yytext);
-    comment_count++;
-}
-
-/* ===== Multi Line Comment ===== */
-"/*"([^*]|\n|(\*+([^*/]|\n)))*"*"+"/"
-{
-    printf("MULTILINE COMMENT\n");
-    comment_count++;
-}
-
-/* ===== Special Symbols ===== */
-";"|","|"("|")"|"{"|"}"
-{
-    printf("SPECIAL SYMBOL : %s\n", yytext);
-}
-
-/* ===== Ignore Spaces ===== */
-[ \t\n]+   ;
-
-/* ===== Invalid Characters ===== */
-.
-{
-    printf("INVALID CHARACTER : %s\n", yytext);
-}
-
-%%
-
-/* ===== Main Function ===== */
-
-int main()
-{
-    printf("\nEnter C Program:\n\n");
-
-    yylex();
-
-    printf("\n========== SUMMARY ==========\n");
-
-    printf("Keywords    : %d\n", keyword_count);
-    printf("Identifiers : %d\n", id_count);
-    printf("Constants   : %d\n", number_count);
-    printf("Operators   : %d\n", operator_count);
-    printf("Comments    : %d\n", comment_count);
-
-    printf("\n====== SYMBOL TABLE ======\n");
-
-    int i;
-
-    for(i=0; i<sym_index; i++)
-    {
-        printf("%d\t%s\n", i+1, symbol_table[i]);
-    }
-
-    return 0;
-}
-
-int yywrap()
-{
-    return 1;
-}
+pwd
+ls
+mkdir oslab
+cd oslab
+touch file1.txt
+ls
+date
+whoami
+cat file1.txt
+cp file1.txt file2.txt
+ls
+mv file2.txt newfile.txt
+ls
+rm newfile.txt
+ls
+clear
 
 
 
 
+Sample Output
 
+/home/student
 
+Documents Downloads
 
+file1.txt
 
+Mon May 19 10:20:15 IST 2026
 
+student
 
+file1.txt file2.txt
 
+file1.txt newfile.txt
 
-
-Steps to Run in Cygwin64
-1. Save File
-Save as:
-lexer.l
-
-2. Open Cygwin64 Terminal
-Move to file location:
-cd /cygdrive/d/path
-
-Example:
-cd /cygdrive/d/compiler
-
-3. Run FLEX
-flex lexer.l
-
-This creates:
-lex.yy.c
-
-4. Compile Using GCC
-gcc lex.yy.c -o lexer
-
-If error occurs:
-gcc lex.yy.c -o lexer -lfl
-
-5. Execute
-./lexer
+file1.txt
