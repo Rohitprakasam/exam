@@ -1,0 +1,96 @@
+Aim
+To implement Sequential File Allocation method.
+
+
+Algorithm
+Initialize all memory blocks as free.
+Read starting block and length of file.
+Check whether consecutive blocks are free.
+If free:
+Allocate blocks sequentially.
+Else:
+Display allocation failure.
+Repeat for all files.
+
+
+
+Program
+
+#include <stdio.h>
+
+int main()
+{
+    int f[50], i, j, n, start, len;
+
+    for(i = 0; i < 50; i++)
+    {
+        f[i] = 0;
+    }
+
+    printf("Enter number of files: ");
+    scanf("%d", &n);
+
+    for(i = 0; i < n; i++)
+    {
+        printf("\nEnter starting block and length of file %d: ",
+               i + 1);
+
+        scanf("%d%d", &start, &len);
+
+        int flag = 0;
+
+        for(j = start; j < start + len; j++)
+        {
+            if(f[j] == 1)
+            {
+                flag = 1;
+                break;
+            }
+        }
+
+        if(flag == 0)
+        {
+            for(j = start; j < start + len; j++)
+            {
+                f[j] = 1;
+            }
+
+            printf("File allocated successfully\n");
+
+            printf("Allocated blocks: ");
+
+            for(j = start; j < start + len; j++)
+            {
+                printf("%d ", j);
+            }
+
+            printf("\n");
+        }
+        else
+        {
+            printf("File cannot be allocated\n");
+        }
+    }
+
+    return 0;
+}
+
+
+
+Compile and Run
+gcc sequential.c
+./a.out
+
+
+Sample Input
+Enter number of files: 2
+Enter starting block and length of file 1:
+2 4
+Enter starting block and length of file 2:
+5 3
+
+
+Sample Output
+File allocated successfully
+Allocated blocks: 2 3 4 5
+File cannot be allocated
