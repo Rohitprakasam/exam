@@ -1,0 +1,208 @@
+Aim
+To generate Three Address Code (TAC) for a simple arithmetic expression using LEX and YACC.
+
+
+LEX Program
+Save as
+tac.l
+
+
+LEX Program
+
+%{
+#include "y.tab.h"
+#include<stdio.h>
+#include<string.h>
+%}
+
+%%
+
+[a-zA-Z][a-zA-Z0-9]*    
+{
+    strcpy(yylval.str, yytext);
+    return ID;
+}
+
+[0-9]+
+{
+    strcpy(yylval.str, yytext);
+    return NUM;
+}
+
+[ \t]
+    ;
+
+\n
+    return '\n';
+
+.   
+    return yytext[0];
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+
+
+
+YACC Program
+Save as:
+tac.y
+
+
+
+YACC Program
+
+%{
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int temp = 1;
+
+void yyerror(char *s);
+int yylex();
+
+char* newtemp()
+{
+    char *t = (char*)malloc(10);
+
+    sprintf(t, "t%d", temp);
+
+    temp++;
+
+    return t;
+}
+%}
+
+/* Union */
+
+%union
+{
+    char str[20];
+}
+
+/* Tokens */
+
+%token <str> ID NUM
+
+/* Type */
+
+%type <str> E
+
+%%
+
+S:
+    ID '=' E '\n'
+    {
+        printf("%s = %s\n", $1, $3);
+    }
+    ;
+
+E:
+      E '+' E
+      {
+            char *tempvar = newtemp();
+
+            printf("%s = %s + %s\n", tempvar, $1, $3);
+
+            strcpy($$, tempvar);
+      }
+
+    | E '-' E
+      {
+            char *tempvar = newtemp();
+
+            printf("%s = %s - %s\n", tempvar, $1, $3);
+
+            strcpy($$, tempvar);
+      }
+
+    | E '*' E
+      {
+            char *tempvar = newtemp();
+
+            printf("%s = %s * %s\n", tempvar, $1, $3);
+
+            strcpy($$, tempvar);
+      }
+
+    | E '/' E
+      {
+            char *tempvar = newtemp();
+
+            printf("%s = %s / %s\n", tempvar, $1, $3);
+
+            strcpy($$, tempvar);
+      }
+
+    | '(' E ')'
+      {
+            strcpy($$, $2);
+      }
+
+    | ID
+      {
+            strcpy($$, $1);
+      }
+
+    | NUM
+      {
+            strcpy($$, $1);
+      }
+    ;
+
+%%
+
+void yyerror(char *s)
+{
+    printf("Invalid Expression\n");
+}
+
+int main()
+{
+    printf("Enter Expression:\n");
+
+    yyparse();
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+Steps to Execute in Cygwin64
+
+Step 1: Generate YACC File
+yacc -d tac.y
+Generated files:
+y.tab.c
+y.tab.h
+
+Step 2: Generate LEX File
+flex tac.l
+Generated file:
+lex.yy.c
+
+Step 3: Compile
+gcc lex.yy.c y.tab.c -o tac
+If error occurs:
+gcc lex.yy.c y.tab.c -o tac -lfl
+
+Step 4: Run
+./tac
+
+Sample Input
+a=b+c*d
+
+Sample Output
+t1 = c * d
+t2 = b + t1
+a = t2
