@@ -9,3 +9,9 @@ Program to recognize a valid controlstructure syntax of the C language (for loop
 [3]
 Implementation of calculator using LEX and YACC 
 #3D
+
+
+[4]
+Generate three address code for a simple program using LEX and YACC
+#4
+
